@@ -1,0 +1,42 @@
+// =========================================
+// CARS
+// =========================================
+model Car {
+  id             Int       @id @default(autoincrement())
+  agencyId       Int
+  cityId         Int
+  name           String
+  category       CarCategory
+  transmission   Transmission
+  fuelType       FuelType
+  seats          Int
+  pricePerDay    Float
+  imageUrl       String?
+  isAvailable    Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  agency         Agency    @relation(fields: [agencyId], references: [id])
+  city           City      @relation(fields: [cityId], references: [id])
+  bookings       Booking[]
+  reviews        Review[]
+}
+
+enum CarCategory {
+  ECONOMY
+  SUV
+  LUXURY
+  VAN
+}
+
+enum Transmission {
+  AUTOMATIC
+  MANUAL
+}
+
+enum FuelType {
+  DIESEL
+  PETROL
+  HYBRID
+  ELECTRIC
+}

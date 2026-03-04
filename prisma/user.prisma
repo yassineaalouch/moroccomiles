@@ -1,0 +1,20 @@
+// =========================================
+// USERS
+// =========================================
+model User {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  password       String
+  fullName       String
+  role           UserRole  @default(CLIENT) // CLIENT ou AGENCY
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  bookings       Booking[]
+  reviews        Review[]
+  agencyProfile  Agency?   // si c'est une agence
+}
+
+enum UserRole {
+  CLIENT
+  AGENCY
+}

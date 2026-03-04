@@ -1,0 +1,14 @@
+// =========================================
+// CONTACT INQUIRIES (agency contact form)
+// =========================================
+model ContactInquiry {
+  id        Int      @id @default(autoincrement())
+  agencyId  Int
+  name      String
+  email     String
+  phone     String?
+  message   String
+  createdAt DateTime @default(now())
+
+  agency Agency @relation(fields: [agencyId], references: [id])
+}

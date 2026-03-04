@@ -1,0 +1,13 @@
+// =========================================
+// CITIES
+// =========================================
+model City {
+  id           Int       @id @default(autoincrement())
+  name         String    @unique
+  slug         String    @unique
+  description  String?
+  cars         Car[]
+  agencies     Agency[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}

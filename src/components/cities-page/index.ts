@@ -1,0 +1,2 @@
+export { CitiesPage } from "./CitiesPage";
+
