@@ -1,0 +1,26 @@
+name = "moroccomiles-booking-handler"
+main = "index.ts"
+compatibility_date = "2026-09-20"
+
+[dev]
+ip = "127.0.0.1"
+port = 8787
+local_protocol = "http"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[vars]
+# Public, non-secret runtime descriptors used by the local Wrangler environment.
+# Secrets stay in `.dev.vars` locally and in `wrangler secret put` for production.
+ALLOWED_ORIGINS = "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,https://moroccomiles.com,https://www.moroccomiles.com"
+BOOKING_NOTIFY_EMAIL = "reservations@moroccomiles.com"
+RESEND_FROM = "MoroccoMiles <reservations@moroccomiles.com>"
+# Expected public.orders columns: full_name, email, chosen_cities, tour_duration, selected_landmarks, custom_message, status
+# Optional: traveler_count, tour_name (see orders-policy.sql)
+
+[[send_email]]
+name = "EMAIL"
+destination_address = "reservations@moroccomiles.com"
+allowed_sender_addresses = ["reservations@moroccomiles.com"]

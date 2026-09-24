@@ -4,8 +4,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { DynamicCityIntro } from "@/components/DynamicIslands";
+import { GeoInsight } from "@/components/GeoInsight";
+import { JsonLd } from "@/components/JsonLd";
 import LandmarkExplorer from "@/components/LandmarkExplorer";
 import { getDestinationCoverImage, getMoroccoDestination, moroccoData } from "@/data/moroccoData";
+import { breadcrumbJsonLd, buildPageMetadata, destinationTitle, destinationTourJsonLd, getDestinationGeo } from "@/lib/seo";
 
 type PageProps = {
   params: { city: string };
@@ -19,36 +22,61 @@ export function generateMetadata({ params }: PageProps): Metadata {
   const destination = getMoroccoDestination(params.city);
   if (!destination) return {};
 
+  const geo = getDestinationGeo(destination);
   const cover = getDestinationCoverImage(destination);
+  const title = destinationTitle(destination.name);
+  const landmarks = destination.landmarks
+    .slice(0, 4)
+    .map((landmark) => landmark.title)
+    .join(", ");
 
-  return {
-    title: `${destination.name} — ${destination.eyebrow}`,
-    description: destination.intro,
-    alternates: { canonical: `/destinations/${destination.slug}` },
-    openGraph: {
-      title: `${destination.name} — ${destination.eyebrow}`,
-      description: destination.intro,
-      images: cover ? [{ url: cover, width: 2000, height: 1200, alt: destination.name }] : undefined
-    }
-  };
+  return buildPageMetadata({
+    title,
+    description: geo.description,
+    path: `/destinations/${destination.slug}`,
+    image: cover,
+    imageAlt: `Private custom ${destination.name} tour — ${destination.eyebrow}, Morocco`,
+    absoluteTitle: true,
+    keywords: [
+      `private custom ${destination.name} tour`,
+      `${destination.name} local insider travel guide Morocco`,
+      `certified native guides ${destination.name}`,
+      destination.eyebrow,
+      landmarks,
+      "authentic hand-crafted passages",
+      "hidden historical gems",
+      "luxury desert bivouacs"
+    ]
+  });
 }
 
 export default function DestinationCityPage({ params }: PageProps) {
   const destination = getMoroccoDestination(params.city);
   if (!destination) notFound();
 
+  const geo = getDestinationGeo(destination);
   const hero = getDestinationCoverImage(destination);
   const heritageLine = destination.landmarks.map((landmark) => landmark.title).join(" · ");
 
   return (
     <main className="bg-morocco-sand text-morocco-dark">
+      <JsonLd
+        data={[
+          destinationTourJsonLd(destination, geo, hero),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Destinations", path: "/destinations" },
+            { name: destination.name, path: `/destinations/${destination.slug}` }
+          ])
+        ]}
+      />
       <DynamicCityIntro city={destination.name} slug={destination.slug} />
 
       <section className="relative min-h-[88vh] overflow-hidden bg-morocco-dark">
         {hero && (
           <Image
             src={hero}
-            alt={`${destination.name}, Morocco`}
+            alt={`${destination.name}, Morocco — ${destination.eyebrow}`}
             fill
             priority
             sizes="100vw"
@@ -65,21 +93,26 @@ export default function DestinationCityPage({ params }: PageProps) {
             <ArrowLeft size={14} /> All destinations
           </Link>
           <p className="mb-5 text-[10px] uppercase tracking-[0.45em] text-morocco-saffron">
-            {destination.region}
+            {destination.region} · From USD {geo.priceFrom.toLocaleString("en-US")}
           </p>
           <h1 className="font-serif text-5xl text-morocco-sand drop-shadow-md md:text-7xl">
-            {destination.name}
+            Private Custom {destination.name} Tour
           </h1>
           <p className="mt-4 font-serif text-xl italic text-morocco-sand/80 sm:text-2xl">
-            {destination.name} - {destination.eyebrow}
+            {destination.name} — {destination.eyebrow}
           </p>
         </div>
       </section>
 
-      <section className="max-w-3xl mx-auto py-12 px-6 font-sans text-stone-700 leading-relaxed text-lg">
+      <GeoInsight answer={geo.directAnswer} insight={geo.eeatInsight} />
+
+      <section className="mx-auto max-w-3xl px-6 py-12 font-sans text-lg leading-relaxed text-stone-700">
         <p className="mb-4 text-[10px] uppercase tracking-[0.4em] text-morocco-saffron">Cultural introduction</p>
         <p>{destination.intro}</p>
         <p className="mt-8 font-sans text-sm leading-relaxed tracking-wide text-stone-500">{heritageLine}</p>
+        <p className="mt-6 font-sans text-sm leading-relaxed tracking-wide text-stone-600">
+          Suggested private stay: <strong>{geo.duration}</strong>, shaped around authentic hand-crafted passages and certified native guides.
+        </p>
       </section>
 
       <LandmarkExplorer cityName={destination.name} landmarks={destination.landmarks} />

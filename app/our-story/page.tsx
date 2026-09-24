@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Heart, Leaf, Users } from "lucide-react";
+import { GeoInsight } from "@/components/GeoInsight";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Our Story",
-  description: "Discover the local roots, values and people behind MoroccoMiles.",
-  alternates: { canonical: "/our-story" }
-};
+  description:
+    "MoroccoMiles is a Marrakech-based private travel atelier with 15 years of craft. Certified native guides, locally owned stays and authentic hand-crafted passages for upscale American and European travelers.",
+  path: "/our-story",
+  image: "/images/destinations/fes/fes-el-bali-1.webp",
+  imageAlt: "Fes el-Bali lanes, Morocco",
+  keywords: ["MoroccoMiles story", "local Morocco travel designers", "certified native guides", "responsible Morocco travel"]
+});
 
 export default function OurStoryPage() {
   return (
@@ -28,6 +34,11 @@ export default function OurStoryPage() {
           </div>
         </div>
       </section>
+
+      <GeoInsight
+        answer="MoroccoMiles began in Marrakech more than 15 years ago with one conviction: the most unforgettable Morocco is found through its people, not a checklist."
+        insight="Our native guides were born within these nine thousand historic lanes of Fes el-Bali and along the camel trails of Merzouga. Local insider tips from our 15 years of craft still decide the doorway, the camp beyond the crowded dunes, and the family table in the Atlas."
+      />
 
       <section className="px-5 py-24 sm:px-8 sm:py-36 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[.65fr_1.35fr]">

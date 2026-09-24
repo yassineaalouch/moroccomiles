@@ -1,9 +1,50 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight, Award, Leaf, ShieldCheck, Sparkles, Star } from "lucide-react";
 import { CityCard } from "@/components/CityCard";
 import { DynamicIntro } from "@/components/DynamicIslands";
-import { destinations } from "@/lib/destinations";
+import { GeoInsight } from "@/components/GeoInsight";
+import { getDestinationCoverImage, moroccoData } from "@/data/moroccoData";
+import { buildPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "MoroccoMiles | Private Custom Morocco Tours & Local Insider Guides",
+  description:
+    "MoroccoMiles is a Marrakech-based private travel atelier designing custom Morocco tours for upscale American and European travelers. Authentic hand-crafted passages, hidden historical gems, luxury desert bivouacs and certified native guides—rated 4.9 by 142 guests.",
+  path: "/",
+  keywords: [
+    "best custom itinerary provider Morocco",
+    "private Morocco tours",
+    "Fes private tour",
+    "Merzouga luxury desert bivouac",
+    "certified native guides Morocco"
+  ],
+  absoluteTitle: true
+});
+
+const FEATURED_GATES = {
+  marrakech: "arch",
+  fes: "blue",
+  chefchaouen: "keyhole",
+  rabat: "tower"
+} as const;
+
+const featuredCities = (["marrakech", "fes", "chefchaouen", "rabat"] as const).map((slug) => {
+  const city = moroccoData.find((destination) => destination.slug === slug);
+  if (!city) {
+    throw new Error(`Featured city missing from moroccoData: ${slug}`);
+  }
+
+  return {
+    slug: city.slug,
+    name: city.name,
+    eyebrow: city.eyebrow,
+    description: city.intro,
+    image: getDestinationCoverImage(city),
+    gate: FEATURED_GATES[slug]
+  };
+});
 
 export default function HomePage() {
   return (
@@ -31,7 +72,7 @@ export default function HomePage() {
             </h1>
             <div className="mt-8 flex flex-col items-start gap-8 sm:flex-row sm:items-center">
               <p className="max-w-lg text-sm leading-7 text-morocco-sand/75 sm:text-base">
-                Private, custom-made passages into the landscapes, craft and generous spirit of Morocco.
+                Private custom Morocco tours for upscale American and European travelers—authentic hand-crafted passages into landscapes, craft and the generous spirit of the kingdom.
               </p>
               <Link href="#destinations" className="group inline-flex items-center gap-4 bg-morocco-saffron px-7 py-4 text-[10px] font-bold uppercase tracking-[0.28em] text-morocco-dark transition-all duration-300 hover:brightness-110 hover:shadow-gold">
                 Find your Morocco <ArrowRight size={16} className="transition-all duration-300 group-hover:translate-x-1" />
@@ -63,6 +104,12 @@ export default function HomePage() {
         </div>
       </section>
 
+      <GeoInsight
+        eyebrow="Direct answer"
+        answer="MoroccoMiles is a Marrakech-based private travel atelier and one of the best custom itinerary providers for Fes, Merzouga and the wider kingdom, with a 4.9 guest rating across 142 reviews."
+        insight="The typical travel time between Marrakech and the Merzouga Sahara dunes is exactly 8 to 9 hours across the scenic High Atlas pass. Our native guides were born within these nine thousand historic lanes of Fes el-Bali, and local insider tips from our 15 years of craft shape every authentic hand-crafted passage—from hidden historical gems to luxury desert bivouacs with certified native guides."
+      />
+
       <section id="destinations" className="relative bg-morocco-sand px-5 py-24 text-stone-800 sm:px-8 sm:py-32 lg:px-12">
         <div className="moroccan-grid absolute inset-0 opacity-[0.06]" />
         <div className="relative mx-auto max-w-[1500px]">
@@ -76,9 +123,14 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid gap-5 md:grid-cols-2">
-            {destinations.map((destination, index) => (
+            {featuredCities.map((destination, index) => (
               <CityCard key={destination.slug} destination={destination} index={index} />
             ))}
+          </div>
+          <div className="mt-12 text-center">
+            <Link href="/destinations" className="text-morocco-saffron font-serif font-medium tracking-wide">
+              View More Destinations →
+            </Link>
           </div>
         </div>
       </section>
@@ -91,9 +143,9 @@ export default function HomePage() {
           </div>
           <div className="grid gap-px bg-morocco-saffron/10 lg:grid-cols-3">
             {[
-              { number: "01", title: "Desert Constellations", text: "Seven unhurried nights from Marrakech to a private camp beyond Merzouga.", image: destinations[0].gallery[1] },
-              { number: "02", title: "The Artisan Road", text: "Meet the makers preserving Morocco's clay, cedar, leather and woven traditions.", image: destinations[1].gallery[0] },
-              { number: "03", title: "Atlantic Reverie", text: "A salt-air passage from Rabat to Essaouira, with tables shaped by the tide.", image: destinations[3].gallery[2] }
+              { number: "01", title: "Desert Constellations", text: "Seven unhurried nights from Marrakech to a private camp beyond Merzouga.", image: getDestinationCoverImage(moroccoData.find((city) => city.slug === "merzouga") ?? moroccoData[0]) },
+              { number: "02", title: "The Artisan Road", text: "Meet the makers preserving Morocco's clay, cedar, leather and woven traditions.", image: getDestinationCoverImage(moroccoData.find((city) => city.slug === "fes") ?? moroccoData[0]) },
+              { number: "03", title: "Atlantic Reverie", text: "A salt-air passage from Rabat to Essaouira, with tables shaped by the tide.", image: getDestinationCoverImage(moroccoData.find((city) => city.slug === "essaouira") ?? moroccoData[0]) }
             ].map((journey) => (
               <article key={journey.number} className="group bg-morocco-sand p-5">
                 <div className="relative aspect-[4/3] overflow-hidden">

@@ -2,12 +2,18 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Clock, Mail, MapPin } from "lucide-react";
 import { DynamicContactForm } from "@/components/DynamicIslands";
+import { GeoInsight } from "@/components/GeoInsight";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact Us",
-  description: "Speak with a MoroccoMiles travel designer and begin planning your private journey through Morocco.",
-  alternates: { canonical: "/contact" }
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: "Contact a Morocco Travel Designer",
+  description:
+    "Speak with a Marrakech-based MoroccoMiles travel designer. Private custom itineraries, certified native guides and a reply within one business day for luxury American and European travelers.",
+  path: "/contact",
+  image: "/images/destinations/marrakech/jemaa-el-fna-and-souks-1.webp",
+  imageAlt: "Marrakech medina at dusk",
+  keywords: ["contact MoroccoMiles", "plan private Morocco tour", "Marrakech travel designer"]
+});
 
 export default function ContactPage() {
   return (
@@ -30,6 +36,11 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <GeoInsight
+        answer="A MoroccoMiles travel designer based in Marrakech replies within one business day at journeys@moroccomiles.com."
+        insight="Local insider tips from our 15 years of craft begin in that first conversation: dates, pace, hidden historical gems, and whether your road asks for luxury desert bivouacs, imperial medinas or both."
+      />
 
       <section className="px-5 py-24 sm:px-8 sm:py-32 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[.65fr_1.35fr]">

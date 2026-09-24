@@ -1,7 +1,7 @@
-import type { Destination } from "@/lib/destinations";
+type GateVariant = "arch" | "blue" | "tower" | "keyhole";
 
 type GateMarkProps = {
-  variant: Destination["gate"];
+  variant: GateVariant;
   className?: string;
 };
 

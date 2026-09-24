@@ -46,9 +46,9 @@ export default function DestinationsDirectory({ cities, regions }: DestinationsD
       <div className="mx-auto max-w-[1500px]">
         <header className="mx-auto max-w-3xl text-center">
           <p className="mb-4 text-[10px] uppercase tracking-[0.4em] text-morocco-saffron">The atlas of cities</p>
-          <h1 className="font-serif text-4xl text-morocco-dark">Regions of Morocco</h1>
+          <h2 className="font-serif text-4xl text-morocco-dark">Regions of Morocco</h2>
           <p className="mt-5 font-sans text-sm leading-relaxed tracking-wide text-stone-600">
-            Imperial medinas, Atlantic citadels, Rif blues, Saharan ksars and Atlas highlands—each destination a distinct threshold into the kingdom.
+            Imperial medinas, Atlantic citadels, Rif blues, Saharan ksars and Atlas highlands—each destination a distinct threshold into the kingdom, written as a private custom tour with certified native guides.
           </p>
           <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             {regions.map((region) => (

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import LandmarkCarousel from "@/components/LandmarkCarousel";
 import type { MoroccoLandmark } from "@/data/moroccoData";
+import { toAnchorId } from "@/lib/seo/site";
 
 const LUXURY_EASE = [0.76, 0, 0.24, 1] as const;
 
@@ -30,12 +31,16 @@ export default function LandmarkExplorer({ cityName, landmarks }: LandmarkExplor
           <h2 className="font-serif text-4xl text-morocco-dark sm:text-5xl">
             Landmarks of {cityName}
           </h2>
+          <p className="mt-4 font-sans text-sm leading-relaxed tracking-wide text-stone-600">
+            Local insider tips from our 15 years of craft: hidden historical gems and authentic hand-crafted passages, timed with certified native guides.
+          </p>
         </header>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
           {landmarks.map((landmark, index) => (
             <motion.article
               key={landmark.title}
+              id={toAnchorId(landmark.title)}
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-8%" }}

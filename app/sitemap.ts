@@ -1,63 +1,31 @@
 import type { MetadataRoute } from "next";
 import { moroccoData } from "@/data/moroccoData";
+import { tours } from "@/lib/tours";
+import { SITE_URL, STATIC_PAGES } from "@/lib/seo/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const destinationPages = moroccoData.map(({ slug }) => ({
-    url: `https://moroccomiles.com/destinations/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
+  const lastModified = new Date();
+
+  const staticEntries: MetadataRoute.Sitemap = STATIC_PAGES.map((page) => ({
+    url: `${SITE_URL}${page.path === "/" ? "" : page.path}`,
+    lastModified,
+    changeFrequency: page.changeFrequency,
+    priority: page.priority
+  }));
+
+  const destinationEntries: MetadataRoute.Sitemap = moroccoData.map(({ slug }) => ({
+    url: `${SITE_URL}/destinations/${slug}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.85
+  }));
+
+  const tourEntries: MetadataRoute.Sitemap = tours.map(({ id }) => ({
+    url: `${SITE_URL}/tours/${id}`,
+    lastModified,
+    changeFrequency: "weekly",
     priority: 0.8
   }));
 
-  return [
-    {
-      url: "https://moroccomiles.com",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1
-    },
-    {
-      url: "https://moroccomiles.com/gallery",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7
-    },
-    {
-      url: "https://moroccomiles.com/our-story",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7
-    },
-    {
-      url: "https://moroccomiles.com/faq",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7
-    },
-    {
-      url: "https://moroccomiles.com/contact",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8
-    },
-    {
-      url: "https://moroccomiles.com/itinerary-builder",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9
-    },
-    {
-      url: "https://moroccomiles.com/tours",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9
-    },
-    {
-      url: "https://moroccomiles.com/destinations",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9
-    },
-    ...destinationPages
-  ];
+  return [...staticEntries, ...destinationEntries, ...tourEntries];
 }

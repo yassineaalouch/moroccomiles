@@ -27,6 +27,14 @@ yarn-error.log*
 # env files
 .env
 .env*.local
+**/.dev.vars
+
+# Cloudflare Workers
+**/.wrangler/
+workers/booking-handler/worker-configuration.d.ts
+
+# dependencies (all workspaces)
+node_modules/
 
 # typescript
 *.tsbuildinfo

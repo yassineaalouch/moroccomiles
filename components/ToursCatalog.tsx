@@ -3,6 +3,7 @@
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { Clock, MapPin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { tourCategories, tours, type Tour, type TourCategory } from "@/lib/tours";
 
@@ -41,15 +42,33 @@ function TourCard({
         <p className="mb-2 flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-morocco-saffron">
           <MapPin size={12} /> {tour.tagline}
         </p>
-        <h2 className="font-serif text-2xl leading-tight text-morocco-dark">{tour.title}</h2>
-        <button
-          type="button"
-          onClick={onToggle}
-          className="mt-5 text-left text-[10px] uppercase tracking-[0.28em] text-stone-500 transition-colors duration-300 hover:text-morocco-saffron"
-          aria-expanded={expanded}
+        <h2 className="font-serif text-2xl leading-tight text-morocco-dark">
+          <Link href={`/tours/${tour.id}`} className="transition-colors duration-300 hover:text-morocco-saffron">
+            {tour.title}
+          </Link>
+        </h2>
+        <Link
+          href={`/book?tour=${tour.id}`}
+          className="mt-5 inline-flex items-center bg-morocco-saffron px-5 py-3 text-[10px] font-bold uppercase tracking-[0.24em] text-morocco-dark transition-all duration-300 hover:brightness-110"
         >
-          {expanded ? "Hide Itinerary Breakdown ↑" : "View Itinerary Breakdown ↓"}
-        </button>
+          Book this tour
+        </Link>
+        <div className="mt-5 flex flex-wrap items-center gap-4">
+          <button
+            type="button"
+            onClick={onToggle}
+            className="text-left text-[10px] uppercase tracking-[0.28em] text-stone-500 transition-colors duration-300 hover:text-morocco-saffron"
+            aria-expanded={expanded}
+          >
+            {expanded ? "Hide Itinerary Breakdown ↑" : "View Itinerary Breakdown ↓"}
+          </button>
+          <Link
+            href={`/tours/${tour.id}`}
+            className="text-[10px] uppercase tracking-[0.28em] text-morocco-saffron transition-colors duration-300 hover:text-morocco-dark"
+          >
+            Open tour page →
+          </Link>
+        </div>
       </motion.div>
 
       <AnimatePresence initial={false}>

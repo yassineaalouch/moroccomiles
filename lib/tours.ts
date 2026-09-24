@@ -18,6 +18,32 @@ export type Tour = {
   days: TourDay[];
 };
 
+export const getTour = (id: string) => tours.find((tour) => tour.id === id);
+
+export const getTourDurationDays = (tour: Tour) => {
+  const match = tour.duration.match(/(\d+)/);
+  return match ? Number(match[1]) : 3;
+};
+
+export const getTourNights = (tour: Tour) => {
+  const match = tour.duration.match(/(\d+)\s*Nights?/i);
+  if (match) return Number(match[1]);
+  return Math.max(1, getTourDurationDays(tour) - 1);
+};
+
+export const getTourPriceFrom = (tour: Tour) => {
+  const days = getTourDurationDays(tour);
+  const rate = tour.category === "saharan" ? 720 : tour.category === "atlas" ? 540 : 610;
+  return days * rate;
+};
+
+export const getTourOgImage = (tour: Tour) => {
+  if (tour.image.startsWith("/")) return tour.image;
+  if (tour.category === "saharan") return "/images/destinations/merzouga/desert-bivouacs-1.webp";
+  if (tour.category === "atlas") return "/images/destinations/imlil/imlil-village-basecamp-1.webp";
+  return "/images/destinations/essaouira/essaouira-main-beach-1.webp";
+};
+
 export const tourCategories: { id: TourCategory | "all"; label: string }[] = [
   { id: "all", label: "All Journeys" },
   { id: "saharan", label: "Saharan Nomadic" },

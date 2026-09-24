@@ -5,7 +5,8 @@ import { Check, ChevronLeft, ChevronRight, Lock, Minus, Plus, Search, X } from "
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { builderCities, type BuilderCity, type LandmarkOption } from "@/lib/itinerary-cities";
+import BookingForm from "@/components/BookingForm";
+import { builderCities, toLandmarkId, type BuilderCity, type LandmarkOption } from "@/lib/itinerary-cities";
 
 export type CityStop = {
   citySlug: string;
@@ -17,22 +18,73 @@ export type CityStop = {
 
 type Phase = "anchor" | "map";
 
-const CITY_COUNTS = [2, 3, 4, 5] as const;
-const PATH_D = "M 60 320 C 180 120, 280 520, 420 280 S 680 80, 820 260 S 980 480, 1140 220";
+type SnakePoint = {
+  index: number;
+  rowIndex: number;
+  colIndex: number;
+  x: number;
+  y: number;
+  left: string;
+  top: string;
+};
+
+const MIN_STOPS = 2;
+const MAX_STOPS = 15;
+const SNAKE_COLUMNS = 5;
+const SNAKE_ROW_HEIGHT = 220;
+const SNAKE_NODE_Y = 110;
+const CITY_COUNT_PRESETS = [2, 3, 4, 5, 6, 7, 8, 10, 12, 15] as const;
 const LUXURY_EASE = [0.76, 0, 0.24, 1] as const;
 
-function getNodePositions(count: number) {
-  const samples = [
-    { x: 90, y: 290 },
-    { x: 280, y: 360 },
-    { x: 470, y: 250 },
-    { x: 700, y: 180 },
-    { x: 980, y: 300 }
-  ];
-  if (count <= 2) return [samples[0], samples[4]];
-  if (count === 3) return [samples[0], samples[2], samples[4]];
-  if (count === 4) return [samples[0], samples[1], samples[3], samples[4]];
-  return samples;
+const foldQuery = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+function getSnakePoint(index: number): SnakePoint {
+  const rowIndex = Math.floor(index / SNAKE_COLUMNS);
+  const colIndex = rowIndex % 2 === 0 ? index % SNAKE_COLUMNS : SNAKE_COLUMNS - 1 - (index % SNAKE_COLUMNS);
+  const x = colIndex * 200 + 100;
+  const y = rowIndex * SNAKE_ROW_HEIGHT + SNAKE_NODE_Y;
+
+  return {
+    index,
+    rowIndex,
+    colIndex,
+    x,
+    y,
+    left: `${colIndex * 20 + 10}%`,
+    top: `${y}px`
+  };
+}
+
+function buildSnakePath(points: Pick<SnakePoint, "x" | "y">[]): string {
+  if (points.length === 0) return "";
+  if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
+
+  let d = `M ${points[0].x} ${points[0].y}`;
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const p0 = points[i - 1] ?? points[i];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[i + 2] ?? p2;
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+    d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+  }
+  return d;
+}
+
+function getSnakeLayout(count: number) {
+  const points = Array.from({ length: count }, (_, index) => getSnakePoint(index));
+  const rows = Math.ceil(count / SNAKE_COLUMNS);
+  const height = rows * SNAKE_ROW_HEIGHT + 80;
+  return { points, rows, height, path: buildSnakePath(points) };
 }
 
 function ImageSlideshow({
@@ -137,14 +189,14 @@ function CityCarousel({
   const [index, setIndex] = useState(0);
 
   const filtered = useMemo(() => {
-    const needle = query.trim().toLowerCase();
+    const needle = foldQuery(query);
     if (!needle) return available;
-    return available.filter(
-      (city) =>
-        city.name.toLowerCase().includes(needle) ||
-        city.landmarkTitle.toLowerCase().includes(needle) ||
-        city.slug.toLowerCase().includes(needle)
-    );
+    return available.filter((city) => {
+      const haystack = foldQuery(
+        `${city.name} ${city.slug} ${city.region} ${city.landmarkTitle} ${city.landmarks.map((landmark) => landmark.title).join(" ")}`
+      );
+      return haystack.includes(needle);
+    });
   }, [available, query]);
 
   useEffect(() => {
@@ -170,6 +222,8 @@ function CityCarousel({
     if (info.offset.x < -70 || info.velocity.x < -450) next();
     else if (info.offset.x > 70 || info.velocity.x > 450) prev();
   };
+
+  const needle = foldQuery(query);
 
   return (
     <motion.div
@@ -198,7 +252,7 @@ function CityCarousel({
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search a city… e.g. Fes"
+              placeholder="Search a city… e.g. Tanger, Fes, Merzouga"
               className="w-full rounded-sm border border-morocco-saffron/20 bg-morocco-sand/50 py-2 pl-10 pr-4 font-sans text-sm text-morocco-dark outline-none transition-all duration-300 placeholder:text-stone-400 focus:border-morocco-saffron"
             />
           </label>
@@ -234,7 +288,7 @@ function CityCarousel({
                     const wrapped = ((offset % filtered.length) + filtered.length) % filtered.length;
                     const visualOffset = wrapped > filtered.length / 2 ? wrapped - filtered.length : wrapped;
                     const isActive = visualOffset === 0;
-                    const isMatch = query.trim().length > 0 && item.name.toLowerCase().includes(query.trim().toLowerCase());
+                    const isMatch = needle.length > 0 && foldQuery(item.name).includes(needle);
 
                     return (
                       <motion.article
@@ -257,8 +311,9 @@ function CityCarousel({
                         transition={{ duration: 0.4, ease: LUXURY_EASE }}
                       >
                         <div className="border-b border-morocco-saffron/10 px-5 py-4">
-                          <h3 className="font-serif text-2xl tracking-widest text-stone-800">{item.name.toUpperCase()}</h3>
-                          <p className="mt-1 text-[10px] uppercase tracking-[0.3em] text-morocco-saffron">{item.landmarkTitle}</p>
+                          <h3 className="font-serif text-2xl tracking-widest text-morocco-dark">{item.name.toUpperCase()}</h3>
+                          <p className="mt-1 text-[10px] uppercase tracking-[0.3em] text-morocco-saffron">{item.region}</p>
+                          <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-stone-500">{item.landmarkTitle}</p>
                         </div>
                         <div className="relative">
                           <ImageSlideshow
@@ -306,7 +361,7 @@ function CityCarousel({
               </div>
 
               <div className="mt-6 flex flex-col items-center gap-3">
-                <div className="flex items-center gap-2">
+                <div className="flex max-w-lg flex-wrap items-center justify-center gap-1.5">
                   {filtered.map((item, dotIndex) => (
                     <button
                       key={`city-dot-${item.slug}`}
@@ -507,8 +562,13 @@ function TreasureMap({
   activeNode: number;
   onNodeClick: (index: number) => void;
 }) {
-  const positions = useMemo(() => getNodePositions(totalSteps), [totalSteps]);
+  const layout = useMemo(() => getSnakeLayout(totalSteps), [totalSteps]);
   const pathLength = useMotionValue(0);
+  const progressedPath = useMemo(() => {
+    const filled = stops.reduce((count, stop) => (stop ? count + 1 : count), 0);
+    const trailCount = Math.max(filled, filled === totalSteps ? totalSteps : Math.min(filled + 1, totalSteps));
+    return buildSnakePath(layout.points.slice(0, Math.max(1, trailCount)));
+  }, [layout.points, stops, totalSteps]);
 
   useEffect(() => {
     const controls = animate(pathLength, 1, { duration: 1.6, ease: LUXURY_EASE });
@@ -516,27 +576,41 @@ function TreasureMap({
   }, [pathLength, totalSteps]);
 
   return (
-    <div className="relative overflow-hidden border border-morocco-saffron/15 bg-morocco-canvas">
+    <div className="relative overflow-x-hidden border border-morocco-saffron/15 bg-morocco-canvas">
       <div className="moroccan-grid absolute inset-0 opacity-[0.04]" />
-      <div className="relative aspect-[16/10] min-h-[420px] w-full sm:min-h-[520px]">
-        <svg viewBox="0 0 1200 560" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <div className="relative w-full" style={{ height: layout.height }}>
+        <svg
+          viewBox={`0 0 1000 ${layout.height}`}
+          className="absolute inset-0 h-full w-full"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
           <motion.path
-            d={PATH_D}
+            d={layout.path}
             fill="none"
+            className="stroke-morocco-saffron/40"
             stroke="#D48C46"
+            strokeOpacity={0.4}
             strokeWidth="2.5"
             strokeLinecap="round"
+            strokeLinejoin="round"
             strokeDasharray="8 14"
             style={{ pathLength }}
-            opacity={0.55}
           />
-          <path d={PATH_D} fill="none" stroke="#D48C46" strokeWidth="1" strokeOpacity="0.15" />
+          <path
+            d={progressedPath}
+            fill="none"
+            className="stroke-morocco-saffron/70"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
 
-        {positions.map((position, index) => {
+        {layout.points.map((point, index) => {
           const stop = stops[index];
           const completed = Boolean(stop);
-          const unlocked = index <= activeNode;
+          const unlocked = index === 0 || Boolean(stops[index - 1]);
           const isActive = index === activeNode && !completed;
 
           return (
@@ -546,11 +620,11 @@ function TreasureMap({
               disabled={!unlocked}
               onClick={() => onNodeClick(index)}
               className={`absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${unlocked ? "cursor-pointer" : "cursor-not-allowed"}`}
-              style={{ left: `${(position.x / 1200) * 100}%`, top: `${(position.y / 560) * 100}%` }}
+              style={{ left: point.left, top: point.top }}
               aria-label={completed ? `Edit stop ${index + 1}: ${stop?.cityName}` : `Configure stop ${index + 1}`}
             >
               <span
-                className={`relative flex size-14 flex-col items-center justify-center rounded-full border-2 text-sm font-serif transition-all duration-300 sm:size-16 ${
+                className={`relative flex size-12 flex-col items-center justify-center rounded-full border-2 font-serif text-sm transition-all duration-300 sm:size-16 ${
                   completed
                     ? "border-morocco-saffron bg-morocco-saffron text-morocco-dark shadow-gold"
                     : isActive
@@ -562,11 +636,13 @@ function TreasureMap({
               >
                 {completed ? <Check size={18} strokeWidth={2} /> : unlocked ? index + 1 : <Lock size={14} />}
               </span>
-              <span className={`mt-2 block max-w-[110px] text-center text-[9px] uppercase tracking-[0.22em] ${completed ? "text-morocco-dark" : "text-stone-500"}`}>
+              <span className={`mt-2 block max-w-[92px] text-center text-[8px] uppercase tracking-[0.18em] sm:max-w-[110px] sm:text-[9px] sm:tracking-[0.22em] ${completed ? "text-morocco-dark" : "text-stone-500"}`}>
                 {completed ? stop?.cityName : unlocked ? `Stop ${index + 1}` : "Locked"}
               </span>
               {completed && (
-                <span className="mt-1 block text-center text-[10px] text-morocco-saffron">{stop?.nights} night{stop && stop.nights > 1 ? "s" : ""}</span>
+                <span className="mt-1 block text-center text-[10px] text-morocco-saffron">
+                  {stop?.nights} night{stop && stop.nights > 1 ? "s" : ""}
+                </span>
               )}
             </button>
           );
@@ -590,18 +666,22 @@ export default function ItineraryBuilder() {
     () => builderCities.filter((city) => !usedSlugs.includes(city.slug) || (editingIndex !== null && stops[editingIndex]?.citySlug === city.slug)),
     [editingIndex, stops, usedSlugs]
   );
-  const completedCount = stops.filter(Boolean).length;
+  const completedStops = stops.filter((stop): stop is CityStop => Boolean(stop));
+  const completedCount = completedStops.length;
   const journeyComplete = totalSteps > 0 && completedCount === totalSteps;
+  const totalNights = completedStops.reduce((sum, stop) => sum + stop.nights, 0);
+  const landmarkTokens = completedStops.flatMap((stop) => stop.landmarks.map((title) => toLandmarkId(stop.citySlug, title)));
 
   const beginMap = (count: number) => {
-    setTotalSteps(count);
-    setStops(Array.from({ length: count }, () => null));
+    const nextCount = Math.min(MAX_STOPS, Math.max(MIN_STOPS, count));
+    setTotalSteps(nextCount);
+    setStops(Array.from({ length: nextCount }, () => null));
     setActiveNode(0);
     setPhase("map");
   };
 
   const openNode = (index: number) => {
-    if (index > activeNode) return;
+    if (index > 0 && !stops[index - 1]) return;
     setEditingIndex(index);
     setDraftCity(null);
     setPanel("carousel");
@@ -642,26 +722,26 @@ export default function ItineraryBuilder() {
               How many cities do you wish to explore in your custom Moroccan passage?
             </h2>
             <p className="mt-6 max-w-xl font-sans text-sm leading-relaxed tracking-wide text-stone-600">
-              Choose a measured number of destinations. We will unlock each stop one at a time along a private treasure map.
+              Choose two to fifteen destinations. Each stop unlocks only after the previous city is confirmed, along a snaking treasure map.
             </p>
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-              {CITY_COUNTS.map((count) => (
+            <div className="mt-12 flex max-w-2xl flex-wrap items-center justify-center gap-3">
+              {CITY_COUNT_PRESETS.map((count) => (
                 <button
                   key={count}
                   type="button"
                   onClick={() => beginMap(count)}
-                  className="min-w-[88px] border border-morocco-saffron/20 bg-morocco-canvas px-6 py-5 font-serif text-3xl text-morocco-dark transition-all duration-300 hover:border-morocco-saffron hover:text-morocco-saffron hover:shadow-gold"
+                  className="min-w-[72px] border border-morocco-saffron/20 bg-morocco-canvas px-5 py-4 font-serif text-3xl text-morocco-dark transition-all duration-300 hover:border-morocco-saffron hover:text-morocco-saffron hover:shadow-gold"
                 >
                   {count}
                 </button>
               ))}
             </div>
             <div className="mt-8 inline-flex items-center gap-4 border border-morocco-saffron/20 bg-morocco-canvas px-4 py-3">
-              <button type="button" onClick={() => setTotalSteps((value) => Math.max(2, value - 1))} className="text-morocco-dark transition-colors duration-300 hover:text-morocco-saffron" aria-label="Fewer cities">
+              <button type="button" onClick={() => setTotalSteps((value) => Math.max(MIN_STOPS, value - 1))} className="text-morocco-dark transition-colors duration-300 hover:text-morocco-saffron" aria-label="Fewer cities">
                 <Minus size={16} />
               </button>
               <span className="min-w-10 text-center font-serif text-2xl text-morocco-saffron">{totalSteps}</span>
-              <button type="button" onClick={() => setTotalSteps((value) => Math.min(5, value + 1))} className="text-morocco-dark transition-colors duration-300 hover:text-morocco-saffron" aria-label="More cities">
+              <button type="button" onClick={() => setTotalSteps((value) => Math.min(MAX_STOPS, value + 1))} className="text-morocco-dark transition-colors duration-300 hover:text-morocco-saffron" aria-label="More cities">
                 <Plus size={16} />
               </button>
               <button type="button" onClick={() => beginMap(totalSteps)} className="ml-2 bg-morocco-saffron px-5 py-2.5 text-[9px] font-bold uppercase tracking-[0.22em] text-morocco-dark transition-all duration-300 hover:brightness-110">
@@ -704,7 +784,7 @@ export default function ItineraryBuilder() {
 
             <TreasureMap totalSteps={totalSteps} stops={stops} activeNode={activeNode} onNodeClick={openNode} />
 
-            <div className="mt-10 grid gap-4 border border-morocco-saffron/15 bg-morocco-canvas p-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-10 grid gap-4 border border-morocco-saffron/15 bg-morocco-canvas p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
               {stops.map((stop, index) => (
                 <div key={`summary-${index}`} className="border border-morocco-saffron/10 bg-morocco-sand px-4 py-4">
                   <p className="text-[9px] uppercase tracking-[0.28em] text-morocco-saffron">Stop {index + 1}</p>
@@ -734,12 +814,17 @@ export default function ItineraryBuilder() {
                     .map((stop) => `${stop!.cityName} (${stop!.nights} nights)`)
                     .join(" → ")}
                 </p>
-                <Link
-                  href="/contact"
-                  className="mt-8 inline-flex bg-morocco-saffron px-7 py-4 text-[10px] font-bold uppercase tracking-[0.25em] text-morocco-dark transition-all duration-300 hover:brightness-110"
-                >
-                  Send this itinerary to a designer
-                </Link>
+                <div className="mt-8">
+                  <BookingForm
+                    cities={completedStops.map((stop) => stop.cityName)}
+                    duration={{ nights: totalNights, days: totalNights + 1, stops: completedStops.length }}
+                    landmarks={landmarkTokens}
+                    placesByCity={completedStops.map((stop) => ({
+                      city: stop.cityName,
+                      places: stop.landmarks
+                    }))}
+                  />
+                </div>
               </motion.div>
             )}
           </motion.section>

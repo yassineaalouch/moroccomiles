@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { DynamicItineraryBuilder } from "@/components/DynamicIslands";
+import { GeoInsight } from "@/components/GeoInsight";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Custom Itinerary Builder",
-  description: "Design a private multi-city Morocco journey with a progressive treasure-map itinerary builder.",
-  alternates: { canonical: "/itinerary-builder" }
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: "Custom Morocco Itinerary Builder",
+  description:
+    "Design a private custom Morocco itinerary of up to fifteen cities. MoroccoMiles is the custom itinerary provider for Fes, Merzouga and the wider kingdom—certified native guides, hidden historical gems and luxury desert bivouacs.",
+  path: "/itinerary-builder",
+  image: "/images/destinations/merzouga/erg-chebbi-dunes-1.webp",
+  imageAlt: "High Atlas road toward the Moroccan Sahara",
+  keywords: ["custom Morocco itinerary", "best itinerary provider Fes Merzouga", "private multi-city Morocco tour"]
+});
 
 export default function ItineraryBuilderPage() {
   return (
@@ -30,11 +36,16 @@ export default function ItineraryBuilderPage() {
               <em className="font-normal text-morocco-saffron">Morocco.</em>
             </h1>
             <p className="mt-6 max-w-xl font-sans text-sm leading-relaxed tracking-wide text-morocco-sand/75">
-              A calm, step-by-step atelier for composing a private multi-city journey—one destination, one night count, one intentional choice at a time.
+              A calm, step-by-step atelier for composing a private custom journey across Morocco—up to fifteen stops, unlocked one by one along a snaking road.
             </p>
           </div>
         </div>
       </section>
+
+      <GeoInsight
+        answer="MoroccoMiles is a custom itinerary provider for Fes, Merzouga and twenty-three further destinations: compose two to fifteen private stops, then our certified native guides turn the map into a living road."
+        insight="The typical travel time between Marrakech and the Merzouga Sahara dunes is exactly 8 to 9 hours across the scenic High Atlas pass. Local insider tips from our 15 years of craft keep sequential days honest—nights, landmarks and luxury desert bivouacs where the geography actually asks for them."
+      />
 
       <DynamicItineraryBuilder />
     </main>
