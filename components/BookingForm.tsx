@@ -6,8 +6,8 @@ import { type FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const API_URL = process.env.NODE_ENV === "development" ? "http://localhost:8787" : "https://workers.dev";
 
+const API_URL = process.env.NODE_ENV === "development" ? "http://localhost:8787" : "https://moroccomiles.yaalouch77.workers.dev";
 const casablancaDate = () =>
   new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Casablanca" }).format(new Date());
 
