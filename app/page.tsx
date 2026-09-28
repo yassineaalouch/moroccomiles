@@ -48,8 +48,9 @@ const featuredCities = (["marrakech", "fes", "chefchaouen", "rabat"] as const).m
 
 export default function HomePage() {
   return (
-    <main className="overflow-hidden bg-morocco-sand">
+    <>
       <DynamicIntro />
+      <main className="overflow-hidden bg-morocco-sand">
       <section className="relative min-h-screen">
         <Image
           src="https://images.unsplash.com/photo-1489493585363-d69421e0edd3?auto=format&fit=crop&w=2400&q=90"
@@ -149,7 +150,7 @@ export default function HomePage() {
             ].map((journey) => (
               <article key={journey.number} className="group bg-morocco-sand p-5">
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image src={journey.image} alt={journey.title} fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover grayscale-[20%] transition-all duration-300 group-hover:scale-105 group-hover:grayscale-0" />
+                  <Image src={journey.image} alt={journey.title} fill loading="eager" sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover grayscale-[20%] transition-[transform,filter] duration-300 group-hover:scale-105 group-hover:grayscale-0" />
                   <span className="absolute left-4 top-4 grid size-10 place-items-center bg-morocco-surface font-serif text-morocco-saffron">{journey.number}</span>
                 </div>
                 <div className="px-2 pb-5 pt-7">
@@ -174,6 +175,7 @@ export default function HomePage() {
           <p className="mt-8 text-[10px] uppercase tracking-[0.35em] text-morocco-sand/75">Elena & James · London</p>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

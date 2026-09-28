@@ -1,6 +1,6 @@
 export const SITE_URL = "https://moroccomiles.com";
 export const SITE_NAME = "MoroccoMiles";
-export const SITE_EMAIL = "journeys@moroccomiles.com";
+export const SITE_EMAIL = "reservations@moroccomiles.com";
 export const SITE_LOCALE = "en_US";
 export const SITE_TAGLINE = "Private custom Morocco tours designed by local storytellers.";
 export const DEFAULT_OG_IMAGE = "/images/destinations/marrakech/jemaa-el-fna-and-souks-1.webp";

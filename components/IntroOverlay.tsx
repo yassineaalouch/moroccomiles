@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 type GatePanelProps = {
   id: string;
@@ -39,8 +39,58 @@ function GatePanel({ id, mirrored = false }: GatePanelProps) {
   );
 }
 
+export function DoorOverlay({
+  title,
+  subtitle,
+  doorsOpen,
+  showGreeting,
+  idPrefix
+}: {
+  title: string;
+  subtitle: string;
+  doorsOpen: boolean;
+  showGreeting: boolean;
+  idPrefix: string;
+}) {
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[100] overflow-hidden bg-transparent">
+      <motion.div
+        className="pointer-events-auto absolute inset-y-0 left-0 w-1/2 bg-morocco-dark"
+        animate={doorsOpen ? { x: "-100%" } : { x: 0 }}
+        transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1] }}
+      >
+        <GatePanel id={`${idPrefix}-left`} />
+      </motion.div>
+      <motion.div
+        className="pointer-events-auto absolute inset-y-0 right-0 w-1/2 bg-morocco-dark"
+        animate={doorsOpen ? { x: "100%" } : { x: 0 }}
+        transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1] }}
+      >
+        <GatePanel id={`${idPrefix}-right`} mirrored />
+      </motion.div>
+      <AnimatePresence>
+        {showGreeting && (
+          <motion.div
+            className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
+            initial={{ opacity: 1, filter: "blur(0px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, filter: "blur(10px)" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <p className="mb-5 text-[9px] uppercase tracking-[0.55em] text-morocco-sand/60 sm:text-[10px]">{subtitle}</p>
+            <h2 className="font-serif text-4xl tracking-wide text-morocco-saffron sm:text-6xl lg:text-7xl">{title}</h2>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+const activeIntros = new Set<string>();
+
 function shouldPlayIntro(storageKey: string, queued: boolean) {
-  if (typeof window === "undefined") return false;
+  if (typeof window === "undefined") return !queued;
+  if (activeIntros.has(storageKey)) return true;
   const value = sessionStorage.getItem(storageKey);
   return queued ? value === "pending" : value !== "seen";
 }
@@ -51,12 +101,19 @@ export default function IntroOverlay({
   storageKey = "moroccoMilesIntro",
   queued = false
 }: IntroOverlayProps) {
-  const [visible, setVisible] = useState(() => shouldPlayIntro(storageKey, queued));
-  const [showGreeting, setShowGreeting] = useState(() => shouldPlayIntro(storageKey, queued));
+  const [visible, setVisible] = useState(!queued);
+  const [showGreeting, setShowGreeting] = useState(!queued);
   const [doorsOpen, setDoorsOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    const play = shouldPlayIntro(storageKey, queued);
+    setVisible(play);
+    setShowGreeting(play);
+  }, [queued, storageKey]);
 
   useEffect(() => {
     if (!visible) return;
+    activeIntros.add(storageKey);
     if (queued) {
       sessionStorage.removeItem(storageKey);
     } else {
@@ -70,43 +127,21 @@ export default function IntroOverlay({
       window.clearTimeout(greetingTimer);
       window.clearTimeout(doorTimer);
       window.clearTimeout(cleanupTimer);
+      window.setTimeout(() => activeIntros.delete(storageKey), 0);
     };
   }, [queued, storageKey, visible]);
 
+  if (!visible) return null;
+
   return (
-    <AnimatePresence initial={false}>
-      {visible && (
-        <motion.div className="pointer-events-none fixed inset-0 z-50 overflow-hidden bg-transparent">
-          <motion.div
-            className="pointer-events-auto absolute inset-y-0 left-0 w-1/2 bg-morocco-dark"
-            animate={doorsOpen ? { x: "-100%" } : { x: 0 }}
-            transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1] }}
-          >
-            <GatePanel id="left" />
-          </motion.div>
-          <motion.div
-            className="pointer-events-auto absolute inset-y-0 right-0 w-1/2 bg-morocco-dark"
-            animate={doorsOpen ? { x: "100%" } : { x: 0 }}
-            transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1] }}
-          >
-            <GatePanel id="right" mirrored />
-          </motion.div>
-          <AnimatePresence>
-            {showGreeting && (
-              <motion.div
-                className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
-                initial={{ opacity: 1, filter: "blur(0px)" }}
-                animate={{ opacity: 1, filter: "blur(0px)" }}
-                exit={{ opacity: 0, filter: "blur(10px)" }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              >
-                <p className="mb-5 text-[9px] uppercase tracking-[0.55em] text-morocco-sand/60 sm:text-[10px]">{subtitle}</p>
-                <h2 className="font-serif text-4xl tracking-wide text-morocco-saffron sm:text-6xl lg:text-7xl">{title}</h2>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div data-home-intro="">
+      <DoorOverlay
+        title={title}
+        subtitle={subtitle}
+        doorsOpen={doorsOpen}
+        showGreeting={showGreeting}
+        idPrefix="home"
+      />
+    </div>
   );
 }

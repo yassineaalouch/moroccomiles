@@ -28,7 +28,7 @@ yarn-error.log*
 .env
 .env*.local
 **/.dev.vars
-
+package-lock.json
 # Cloudflare Workers
 **/.wrangler/
 workers/booking-handler/worker-configuration.d.ts

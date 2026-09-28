@@ -1,8 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-
-const IntroOverlay = dynamic(() => import("./IntroOverlay"), { ssr: false });
+import IntroOverlay from "./IntroOverlay";
 const BookingForm = dynamic(() => import("./BookingForm"), {
   ssr: false,
   loading: () => <div className="min-h-96 animate-pulse border border-morocco-saffron/10 bg-morocco-surface" />
@@ -32,17 +31,6 @@ const ToursCatalog = dynamic(() => import("./ToursCatalog"), {
 
 export function DynamicIntro() {
   return <IntroOverlay />;
-}
-
-export function DynamicCityIntro({ city, slug }: { city: string; slug: string }) {
-  return (
-    <IntroOverlay
-      title={`Welcome to ${city}`}
-      subtitle="A new story begins"
-      storageKey={`moroccoMilesCityTransition:${slug}`}
-      queued
-    />
-  );
 }
 
 export function DynamicBooking({

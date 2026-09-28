@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { MoroccoDestinationSummary } from "@/data/moroccoData";
+import { queueCityGate } from "./CityGate";
 
 const LUXURY_EASE = [0.76, 0, 0.24, 1] as const;
 
@@ -37,7 +38,8 @@ export default function DestinationsDirectory({ cities, regions }: DestinationsD
   }, [cities, query]);
 
   const openCity = (slug: string) => {
-    sessionStorage.setItem(`moroccoMilesCityTransition:${slug}`, "pending");
+    const city = cities.find((item) => item.slug === slug);
+    if (city) queueCityGate({ slug: city.slug, name: city.name, image: city.cover });
     router.push(`/destinations/${slug}`);
   };
 

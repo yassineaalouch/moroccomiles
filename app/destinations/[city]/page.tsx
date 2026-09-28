@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { DynamicCityIntro } from "@/components/DynamicIslands";
 import { GeoInsight } from "@/components/GeoInsight";
 import { JsonLd } from "@/components/JsonLd";
 import LandmarkExplorer from "@/components/LandmarkExplorer";
@@ -70,8 +69,6 @@ export default function DestinationCityPage({ params }: PageProps) {
           ])
         ]}
       />
-      <DynamicCityIntro city={destination.name} slug={destination.slug} />
-
       <section className="relative min-h-[88vh] overflow-hidden bg-morocco-dark">
         {hero && (
           <Image

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { CityGate } from "@/components/CityGate";
 import SiteHeader from "@/components/SiteHeader";
 import { JsonLd } from "@/components/JsonLd";
 import { layoutGraphJsonLd } from "@/lib/seo";
@@ -25,8 +26,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${cormorant.variable} ${manrope.variable}`}>
       <body className="bg-morocco-sand font-sans text-stone-800 antialiased">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem("moroccoMilesIntro")==="seen"){document.documentElement.classList.add("intro-seen")}}catch(e){}`
+          }}
+        />
         <JsonLd data={layoutGraphJsonLd()} />
         <SiteHeader />
+        <CityGate />
         {children}
         <footer className="border-t border-morocco-saffron/10 bg-morocco-surface px-5 py-12 text-morocco-sand sm:px-8">
           <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 sm:flex-row sm:items-end">

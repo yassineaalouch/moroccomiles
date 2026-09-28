@@ -38,7 +38,7 @@ export default function ContactPage() {
       </section>
 
       <GeoInsight
-        answer="A MoroccoMiles travel designer based in Marrakech replies within one business day at journeys@moroccomiles.com."
+        answer="A MoroccoMiles travel designer based in Marrakech replies within one business day at reservations@moroccomiles.com."
         insight="Local insider tips from our 15 years of craft begin in that first conversation: dates, pace, hidden historical gems, and whether your road asks for luxury desert bivouacs, imperial medinas or both."
       />
 
@@ -49,11 +49,11 @@ export default function ContactPage() {
             <h2 className="mt-5 font-serif text-5xl leading-tight">Tell us where your imagination is taking you.</h2>
             <p className="mt-7 max-w-md font-sans text-sm leading-relaxed tracking-wide text-stone-600">Whether you have exact dates or only the beginning of an idea, our local designers will help shape the road ahead.</p>
             <div className="mt-12 space-y-7 border-t border-morocco-saffron/25 pt-9">
-              <a href="mailto:journeys@moroccomiles.com" className="group flex items-start gap-4 transition-colors duration-300 hover:text-morocco-saffron">
+              <a href="mailto:reservations@moroccomiles.com" className="group flex items-start gap-4 transition-colors duration-300 hover:text-morocco-saffron">
                 <Mail className="mt-0.5 text-morocco-saffron" size={19} strokeWidth={1.5} />
                 <span>
                   <span className="block text-[9px] uppercase tracking-[0.3em] text-stone-500">Email</span>
-                  <span className="mt-1 block text-sm">journeys@moroccomiles.com</span>
+                  <span className="mt-1 block text-sm">reservations@moroccomiles.com</span>
                 </span>
               </a>
               <div className="flex items-start gap-4">

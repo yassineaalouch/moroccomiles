@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { queueCityGate } from "./CityGate";
 import { GateMark } from "./GateMark";
 
 export type HomeCityCard = {
@@ -23,7 +24,7 @@ export function CityCard({ destination, index }: { destination: HomeCityCard; in
   const enter = () => {
     if (transitioning) return;
     setTransitioning(true);
-    sessionStorage.setItem(`moroccoMilesCityTransition:${destination.slug}`, "pending");
+    queueCityGate({ slug: destination.slug, name: destination.name, image: destination.image });
     router.push(`/destinations/${destination.slug}`);
   };
 
@@ -32,14 +33,21 @@ export function CityCard({ destination, index }: { destination: HomeCityCard; in
         type="button"
         onClick={enter}
         disabled={transitioning}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-10%" }}
-        transition={{ delay: index * 0.08 }}
+        initial={{ y: 24 }}
+        whileInView={{ y: 0 }}
+        viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+        transition={{ delay: index * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         className="group relative aspect-[4/5] w-full overflow-hidden border border-morocco-saffron/10 bg-morocco-surface text-left transition-all duration-300 hover:border-morocco-saffron/30 hover:shadow-gold"
         aria-label={`Explore ${destination.name}`}
       >
-        <Image src={destination.image} alt={`${destination.name}, Morocco`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-300 group-hover:scale-105" />
+        <Image
+          src={destination.image}
+          alt={`${destination.name}, Morocco`}
+          fill
+          loading="eager"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-morocco-dark via-morocco-dark/25 to-transparent" />
         <GateMark variant={destination.gate} className="absolute right-3 top-5 h-40 text-morocco-sand opacity-30 transition-all duration-300 group-hover:opacity-70" />
         <div className="absolute inset-x-0 bottom-0 p-7 sm:p-9">
