@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import { CityGate } from "@/components/CityGate";
 import SiteHeader from "@/components/SiteHeader";
 import { JsonLd } from "@/components/JsonLd";
@@ -7,17 +7,24 @@ import { layoutGraphJsonLd } from "@/lib/seo";
 import { rootMetadata } from "@/lib/seo/metadata";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
+const cormorant = localFont({
+  src: "./fonts/cormorant-garamond-latin.woff2",
+  weight: "300 700",
+  style: "normal",
   variable: "--font-cormorant",
-  weight: ["400", "500", "600", "700"],
-  display: "swap"
+  display: "swap",
+  adjustFontFallback: false,
+  fallback: ["Palatino Linotype", "Palatino", "serif"]
 });
 
-const manrope = Manrope({
-  subsets: ["latin"],
+const manrope = localFont({
+  src: "./fonts/manrope-latin.woff2",
+  weight: "200 800",
+  style: "normal",
   variable: "--font-manrope",
-  display: "swap"
+  display: "swap",
+  adjustFontFallback: false,
+  fallback: ["Arial", "Helvetica", "sans-serif"]
 });
 
 export const metadata: Metadata = rootMetadata;
