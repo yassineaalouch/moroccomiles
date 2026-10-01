@@ -1,5 +1,10 @@
 export const faqItems = [
   {
+    question: "What does MoroccoMiles offer?",
+    answer:
+      "Private custom Morocco tours and recommended multi-day journeys. Guests work with a travel designer in Marrakech who shapes the route, stays, guiding and daily rhythm of the trip."
+  },
+  {
     question: "Are your Morocco tours completely private?",
     answer:
       "Yes. Every MoroccoMiles journey is private and designed exclusively for you and your chosen travel companions. We do not combine unrelated guests into tour groups."

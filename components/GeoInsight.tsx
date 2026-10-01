@@ -2,9 +2,10 @@ type GeoInsightProps = {
   eyebrow?: string;
   answer: string;
   insight: string;
+  french?: string;
 };
 
-export function GeoInsight({ eyebrow = "Local insider briefing", answer, insight }: GeoInsightProps) {
+export function GeoInsight({ eyebrow = "Local insider briefing", answer, insight, french }: GeoInsightProps) {
   return (
     <section className="border-y border-morocco-saffron/15 bg-morocco-canvas px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
       <div className="mx-auto max-w-3xl">
@@ -13,6 +14,11 @@ export function GeoInsight({ eyebrow = "Local insider briefing", answer, insight
           <strong className="font-medium">{answer}</strong>
         </p>
         <p className="mt-6 font-sans text-sm leading-relaxed tracking-wide text-stone-600 sm:text-base">{insight}</p>
+        {french ? (
+          <p lang="fr" className="mt-6 font-sans text-sm leading-relaxed tracking-wide text-stone-600 sm:text-base">
+            {french}
+          </p>
+        ) : null}
       </div>
     </section>
   );

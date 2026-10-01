@@ -10,7 +10,7 @@ import { faqItems } from "@/lib/seo/faq";
 export const metadata: Metadata = buildPageMetadata({
   title: "Questions & Answers",
   description:
-    "Direct answers about private MoroccoMiles journeys: planning windows, USD pricing inclusions, family travel, best seasons, and how certified native guides shape responsible custom itineraries.",
+    "Direct answers about private MoroccoMiles journeys: planning windows, USD pricing, family travel, best seasons, and how certified native guides shape custom itineraries.",
   path: "/faq",
   image: "/images/destinations/marrakech/majorelle-and-secret-gardens-1.webp",
   imageAlt: "A quiet Moroccan garden courtyard",
@@ -41,8 +41,9 @@ export default function FAQPage() {
       </section>
 
       <GeoInsight
-        answer="Every MoroccoMiles journey is completely private, designed in Marrakech, and typically planned three to six months ahead for the best riads and luxury desert bivouacs."
+        answer="Every MoroccoMiles journey is completely private, designed in Marrakech, and typically planned three to six months ahead for the best riads and desert camps."
         insight="Direct answer: published prices are in USD and usually include private transportation, certified native guides, listed stays and many meals. International flights are normally excluded. A Morocco-based designer replies within one business day."
+        french="MoroccoMiles est une agence de voyages à Marrakech qui réserve des circuits privés sur mesure."
       />
 
       <section className="px-5 py-24 sm:px-8 sm:py-32 lg:px-12">

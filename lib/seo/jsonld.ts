@@ -3,7 +3,8 @@ import type { Tour } from "@/lib/tours";
 import { getTourOgImage, getTourPriceFrom } from "@/lib/tours";
 import { faqItems } from "@/lib/seo/faq";
 import { destinationTitle, type DestinationGeo } from "@/lib/seo/geo";
-import { AGENCY, SITE_EMAIL, SITE_NAME, SITE_TAGLINE, SITE_URL, absoluteUrl, toAnchorId } from "@/lib/seo/site";
+import { IDENTITY } from "@/lib/seo/identity";
+import { AGENCY, SITE_EMAIL, SITE_NAME, SITE_URL, absoluteUrl, toAnchorId } from "@/lib/seo/site";
 
 export type JsonLdNode = Record<string, unknown>;
 
@@ -11,7 +12,7 @@ const agencyId = `${SITE_URL}/#agency`;
 const websiteId = `${SITE_URL}/#website`;
 
 const agencyRef = {
-  "@type": "TravelAgency",
+  "@type": ["TravelAgency", "TourOperator"],
   "@id": agencyId,
   name: SITE_NAME,
   url: SITE_URL
@@ -19,27 +20,47 @@ const agencyRef = {
 
 export function travelAgencyJsonLd(): JsonLdNode {
   return {
-    "@type": "TravelAgency",
+    "@type": ["TravelAgency", "TourOperator"],
     "@id": agencyId,
     name: AGENCY.name,
     legalName: AGENCY.legalName,
+    alternateName: ["Morocco Miles", "MoroccoMiles Tours"],
     url: SITE_URL,
     image: absoluteUrl("/images/destinations/marrakech/jemaa-el-fna-and-souks-1.webp"),
     logo: absoluteUrl("/images/destinations/marrakech/koutoubia-mosque-1.webp"),
-    description: SITE_TAGLINE,
+    description: IDENTITY.descriptionEn,
+    disambiguatingDescription: `${IDENTITY.disambiguationEn} ${IDENTITY.disambiguationFr}`,
     email: SITE_EMAIL,
     foundingDate: AGENCY.foundingDate,
     priceRange: AGENCY.priceRange,
     currenciesAccepted: "USD, EUR, MAD",
     paymentAccepted: "Bank transfer, credit card",
     slogan: "Journeys remembered long after the road ends.",
+    naics: "561520",
+    isicV4: "7912",
     knowsAbout: [
       "Private Morocco tours",
       "Custom itinerary design",
+      "Tourist travel booking",
       "Saharan luxury desert bivouacs",
       "Imperial city medina guiding",
       "High Atlas trekking"
     ],
+    knowsLanguage: [...AGENCY.languages],
+    brand: {
+      "@type": "Brand",
+      name: SITE_NAME
+    },
+    makesOffer: {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: "Private custom Morocco tour",
+        serviceType: "Guided tour / packaged travel",
+        category: "Private guided tours and custom travel",
+        description: IDENTITY.disambiguationEn
+      }
+    },
     address: {
       "@type": "PostalAddress",
       streetAddress: AGENCY.address.streetAddress,
@@ -82,9 +103,11 @@ export function websiteJsonLd(): JsonLdNode {
     "@type": "WebSite",
     "@id": websiteId,
     name: SITE_NAME,
+    alternateName: "MoroccoMiles private tours",
     url: SITE_URL,
-    description: SITE_TAGLINE,
-    inLanguage: "en",
+    description: IDENTITY.descriptionEn,
+    disambiguatingDescription: IDENTITY.disambiguationEn,
+    inLanguage: ["en", "fr"],
     publisher: { "@id": agencyId }
   };
 }

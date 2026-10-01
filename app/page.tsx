@@ -6,20 +6,13 @@ import { CityCard } from "@/components/CityCard";
 import { DynamicIntro } from "@/components/DynamicIslands";
 import { GeoInsight } from "@/components/GeoInsight";
 import { getDestinationCoverImage, moroccoData } from "@/data/moroccoData";
-import { buildPageMetadata } from "@/lib/seo";
+import { HOME_DESCRIPTION, IDENTITY, buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "MoroccoMiles | Private Custom Morocco Tours & Local Insider Guides",
-  description:
-    "MoroccoMiles is a Marrakech-based private travel atelier designing custom Morocco tours for upscale American and European travelers. Authentic hand-crafted passages, hidden historical gems, luxury desert bivouacs and certified native guides—rated 4.9 by 142 guests.",
+  title: IDENTITY.titleHome,
+  description: HOME_DESCRIPTION,
   path: "/",
-  keywords: [
-    "best custom itinerary provider Morocco",
-    "private Morocco tours",
-    "Fes private tour",
-    "Merzouga luxury desert bivouac",
-    "certified native guides Morocco"
-  ],
+  keywords: [...IDENTITY.keywords],
   absoluteTitle: true
 });
 
@@ -66,7 +59,7 @@ export default function HomePage() {
         <div className="relative mx-auto flex min-h-screen max-w-[1500px] items-end px-5 pb-20 pt-36 sm:px-8 sm:pb-24 lg:px-12">
           <div className="max-w-4xl">
             <p className="mb-6 flex items-center gap-4 text-[10px] uppercase tracking-[0.45em] text-morocco-saffron">
-              <span className="h-px w-12 bg-morocco-saffron" /> Private journeys · Morocco
+              <span className="h-px w-12 bg-morocco-saffron" /> Private tours · Custom travel · Morocco
             </p>
             <h1 className="text-balance font-serif text-6xl font-medium leading-[0.88] tracking-[-0.04em] text-morocco-sand sm:text-8xl lg:text-[9.4rem]">
               Morocco,<br /><em className="font-normal text-morocco-saffron">felt deeply.</em>
@@ -107,8 +100,9 @@ export default function HomePage() {
 
       <GeoInsight
         eyebrow="Direct answer"
-        answer="MoroccoMiles is a Marrakech-based private travel atelier and one of the best custom itinerary providers for Fes, Merzouga and the wider kingdom, with a 4.9 guest rating across 142 reviews."
-        insight="The typical travel time between Marrakech and the Merzouga Sahara dunes is exactly 8 to 9 hours across the scenic High Atlas pass. Our native guides were born within these nine thousand historic lanes of Fes el-Bali, and local insider tips from our 15 years of craft shape every authentic hand-crafted passage—from hidden historical gems to luxury desert bivouacs with certified native guides."
+        answer="MoroccoMiles is a Marrakech travel agency that designs and books private Morocco tours, with a 4.9 guest rating across 142 reviews."
+        insight="We shape custom itineraries, pair you with certified native guides, and reserve riads and desert bivouacs. The typical travel time between Marrakech and the Merzouga Sahara dunes is 8 to 9 hours across the High Atlas. Local insider tips from our 15 years of craft shape every authentic hand-crafted passage."
+        french="MoroccoMiles est une agence de voyages à Marrakech qui conçoit et réserve des circuits touristiques privés : guides, hébergements et transport avec chauffeur dans le cadre du voyage."
       />
 
       <section id="destinations" className="relative bg-morocco-sand px-5 py-24 text-stone-800 sm:px-8 sm:py-32 lg:px-12">

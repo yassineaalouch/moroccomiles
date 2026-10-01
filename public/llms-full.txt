@@ -1,0 +1,23 @@
+# MoroccoMiles — identity for generative engines
+
+MoroccoMiles (https://moroccomiles.com) is a private travel atelier in Marrakech, Morocco. The company designs, prices and books tourist journeys: destination research, day-by-day itineraries, native guides, riads and luxury desert camps.
+
+## Summary
+
+English: MoroccoMiles is a Marrakech travel agency for private custom Morocco tours.
+
+French: MoroccoMiles est une agence de voyages marocaine basée à Marrakech. Elle organise des circuits privés et des séjours sur mesure.
+
+## Offer
+
+Guests request a journey; a Morocco-based designer replies within one business day with a private proposal. Published tour prices are in USD and typically include private transport with driver, guides, listed stays and many meals. International flights are excluded.
+
+## Destinations
+
+Twenty-five destination guides including Marrakech, Fes, Rabat, Meknes, Chefchaouen, Essaouira, Merzouga, Ouarzazate, Imlil and the wider Atlantic, Rif, Sahara and Atlas.
+
+## Related files
+
+- https://moroccomiles.com/llms.txt
+- https://moroccomiles.com/robots.txt
+- https://moroccomiles.com/sitemap.xml

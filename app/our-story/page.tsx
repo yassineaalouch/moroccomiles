@@ -7,7 +7,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildPageMetadata({
   title: "Our Story",
   description:
-    "MoroccoMiles is a Marrakech-based private travel atelier with 15 years of craft. Certified native guides, locally owned stays and authentic hand-crafted passages for upscale American and European travelers.",
+    "MoroccoMiles is a Marrakech travel agency with 15 years of craft. Certified native guides, locally owned stays and authentic hand-crafted passages for private Morocco tours.",
   path: "/our-story",
   image: "/images/destinations/fes/fes-el-bali-1.webp",
   imageAlt: "Fes el-Bali lanes, Morocco",
@@ -37,7 +37,8 @@ export default function OurStoryPage() {
 
       <GeoInsight
         answer="MoroccoMiles began in Marrakech more than 15 years ago with one conviction: the most unforgettable Morocco is found through its people, not a checklist."
-        insight="Our native guides were born within these nine thousand historic lanes of Fes el-Bali and along the camel trails of Merzouga. Local insider tips from our 15 years of craft still decide the doorway, the camp beyond the crowded dunes, and the family table in the Atlas."
+        insight="We design and book private tourist journeys. Our native guides were born within the nine thousand historic lanes of Fes el-Bali and along the camel trails of Merzouga. Local insider tips from our 15 years of craft still decide the doorway, the camp beyond the crowded dunes, and the family table in the Atlas."
+        french="MoroccoMiles est une agence de voyages privée à Marrakech. Elle conçoit et réserve des circuits touristiques sur mesure."
       />
 
       <section className="px-5 py-24 sm:px-8 sm:py-36 lg:px-12">

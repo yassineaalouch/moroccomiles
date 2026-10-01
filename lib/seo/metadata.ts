@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { HOME_DESCRIPTION, IDENTITY } from "@/lib/seo/identity";
 import { SITE_NAME, SITE_URL, SITE_LOCALE, DEFAULT_OG_IMAGE, DEFAULT_OG_ALT, absoluteUrl } from "@/lib/seo/site";
 
 export type PageMetadataInput = {
@@ -52,6 +53,7 @@ export function buildPageMetadata({
     openGraph: {
       type: ogType,
       locale: SITE_LOCALE,
+      alternateLocale: ["fr_FR"],
       url,
       siteName: SITE_NAME,
       title,
@@ -70,22 +72,11 @@ export function buildPageMetadata({
 export const rootMetadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "MoroccoMiles | Private Custom Morocco Tours & Local Insider Guides",
+    default: IDENTITY.titleDefault,
     template: "%s | MoroccoMiles"
   },
-  description:
-    "MoroccoMiles designs private custom Morocco tours for upscale American and European travelers. Authentic hand-crafted passages, hidden historical gems, luxury desert bivouacs and certified native guides—local insider tips from our 15 years of craft.",
-  keywords: [
-    "private Morocco tours",
-    "custom Morocco itinerary",
-    "luxury Morocco travel",
-    "local insider Morocco guide",
-    "certified native guides Morocco",
-    "Fes private tour",
-    "Marrakech private tour",
-    "Merzouga luxury desert bivouac",
-    "High Atlas private journey"
-  ],
+  description: HOME_DESCRIPTION,
+  keywords: [...IDENTITY.keywords],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
@@ -96,11 +87,11 @@ export const rootMetadata: Metadata = {
   openGraph: {
     type: "website",
     locale: SITE_LOCALE,
+    alternateLocale: ["fr_FR"],
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "MoroccoMiles | Private Custom Morocco Tours",
-    description:
-      "Bespoke private journeys through Morocco, designed by local storytellers. Hidden historical gems, authentic hand-crafted passages and luxury desert bivouacs.",
+    title: IDENTITY.titleHome,
+    description: HOME_DESCRIPTION,
     images: [
       {
         url: DEFAULT_OG_IMAGE,
@@ -113,9 +104,8 @@ export const rootMetadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MoroccoMiles | Private Custom Morocco Tours",
-    description:
-      "Private custom Morocco tours with certified native guides, luxury desert bivouacs and 15 years of local craft.",
+    title: IDENTITY.titleHome,
+    description: HOME_DESCRIPTION,
     images: [
       {
         url: DEFAULT_OG_IMAGE,
