@@ -119,18 +119,17 @@ function ImageSlideshow({
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={`${alt}-${slide}`}
-          className="absolute inset-0"
-          initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.55, ease: LUXURY_EASE }}
-        >
-          <Image src={safeImages[slide]} alt={alt} fill sizes="(max-width: 768px) 100vw, 420px" className="object-cover" />
-        </motion.div>
-      </AnimatePresence>
+      {safeImages.map((src, imageIndex) => (
+        <Image
+          key={`${src}-${imageIndex}`}
+          src={src}
+          alt={imageIndex === slide ? alt : ""}
+          fill
+          sizes="(max-width: 768px) 100vw, 420px"
+          className={`object-cover ${imageIndex === slide ? "opacity-100" : "pointer-events-none opacity-0"}`}
+          aria-hidden={imageIndex === slide ? undefined : true}
+        />
+      ))}
 
       {interactive && safeImages.length > 1 && (
         <>
@@ -284,31 +283,17 @@ function CityCarousel({
                   onDragEnd={onDragEnd}
                 >
                   {filtered.map((item, cardIndex) => {
-                    const offset = cardIndex - index;
-                    const wrapped = ((offset % filtered.length) + filtered.length) % filtered.length;
-                    const visualOffset = wrapped > filtered.length / 2 ? wrapped - filtered.length : wrapped;
-                    const isActive = visualOffset === 0;
+                    if (cardIndex !== index) return null;
                     const isMatch = needle.length > 0 && foldQuery(item.name).includes(needle);
 
                     return (
-                      <motion.article
+                      <article
                         key={item.slug}
-                        className={`absolute inset-x-0 top-0 overflow-hidden border bg-morocco-sand transition-shadow duration-300 ${
-                          isActive && isMatch
+                        className={`absolute inset-x-0 top-0 overflow-hidden border bg-morocco-sand ${
+                          isMatch
                             ? "border-morocco-saffron ring-1 ring-morocco-saffron shadow-gold"
-                            : isActive
-                              ? "border-morocco-saffron/40 shadow-gold"
-                              : "border-morocco-saffron/15"
+                            : "border-morocco-saffron/40 shadow-gold"
                         }`}
-                        style={{ zIndex: 20 - Math.abs(visualOffset) }}
-                        animate={{
-                          x: visualOffset * 28,
-                          y: Math.abs(visualOffset) * 14,
-                          scale: isActive ? 1 : 0.93,
-                          opacity: Math.abs(visualOffset) > 2 ? 0 : 1 - Math.abs(visualOffset) * 0.18,
-                          rotate: visualOffset * -2.5
-                        }}
-                        transition={{ duration: 0.4, ease: LUXURY_EASE }}
                       >
                         <div className="border-b border-morocco-saffron/10 px-5 py-4">
                           <h3 className="font-serif text-2xl tracking-widest text-morocco-dark">{item.name.toUpperCase()}</h3>
@@ -320,8 +305,7 @@ function CityCarousel({
                             images={item.gallery}
                             alt={`${item.name} gallery`}
                             className="aspect-[4/3]"
-                            autoPlay={isActive}
-                            intervalMs={2800}
+                            autoPlay={false}
                           />
                           <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-morocco-dark/65 via-morocco-dark/10 to-transparent px-5 pb-8 pt-12">
                             <p className="font-serif text-lg text-morocco-sand">{item.landmarkTitle}</p>
@@ -335,17 +319,15 @@ function CityCarousel({
                           >
                             Know More →
                           </Link>
-                          {isActive && (
-                            <button
-                              type="button"
-                              onClick={() => onSelect(item)}
-                              className="bg-morocco-saffron px-4 py-2.5 text-[9px] font-bold uppercase tracking-[0.22em] text-morocco-dark transition-all duration-300 hover:brightness-110"
-                            >
-                              Select {item.name}
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            onClick={() => onSelect(item)}
+                            className="bg-morocco-saffron px-4 py-2.5 text-[9px] font-bold uppercase tracking-[0.22em] text-morocco-dark transition-all duration-300 hover:brightness-110"
+                          >
+                            Select {item.name}
+                          </button>
                         </div>
-                      </motion.article>
+                      </article>
                     );
                   })}
                 </motion.div>
@@ -409,8 +391,7 @@ function LandmarkCard({
         images={landmark.images}
         alt={landmark.title}
         className="aspect-[5/4]"
-        autoPlay={selected}
-        intervalMs={2600}
+        autoPlay={false}
         interactive
       />
       <div className="flex items-center justify-between gap-3 px-3 py-3">

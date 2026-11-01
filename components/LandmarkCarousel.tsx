@@ -1,11 +1,8 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useState } from "react";
-
-const LUXURY_EASE = [0.76, 0, 0.24, 1] as const;
 
 type LandmarkCarouselProps = {
   images: string[];
@@ -30,25 +27,18 @@ export default function LandmarkCarousel({ images, alt, priority = false }: Land
 
   return (
     <div className="group relative aspect-[4/3] overflow-hidden bg-morocco-surface">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={current}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.45, ease: LUXURY_EASE }}
-          className="absolute inset-0"
-        >
-          <Image
-            src={current}
-            alt={alt}
-            fill
-            priority={priority}
-            sizes="(max-width: 1024px) 100vw, 60vw"
-            className="object-cover"
-          />
-        </motion.div>
-      </AnimatePresence>
+      {images.map((src, imageIndex) => (
+        <Image
+          key={`${src}-${imageIndex}`}
+          src={src}
+          alt={imageIndex === index ? alt : ""}
+          fill
+          priority={priority && imageIndex === 0}
+          sizes="(max-width: 1024px) 100vw, 60vw"
+          className={`object-cover ${imageIndex === index ? "opacity-100" : "pointer-events-none opacity-0"}`}
+          aria-hidden={imageIndex === index ? undefined : true}
+        />
+      ))}
 
       {total > 1 && (
         <>
