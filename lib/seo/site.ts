@@ -35,6 +35,8 @@ export const STATIC_PAGES = [
   { path: "/", changeFrequency: "weekly" as const, priority: 1 },
   { path: "/destinations", changeFrequency: "weekly" as const, priority: 0.9 },
   { path: "/tours", changeFrequency: "weekly" as const, priority: 0.9 },
+  { path: "/car-rental", changeFrequency: "monthly" as const, priority: 0.8 },
+  { path: "/car-rental/terms", changeFrequency: "yearly" as const, priority: 0.4 },
   { path: "/book", changeFrequency: "monthly" as const, priority: 0.6 },
   { path: "/itinerary-builder", changeFrequency: "weekly" as const, priority: 0.9 },
   { path: "/gallery", changeFrequency: "weekly" as const, priority: 0.7 },

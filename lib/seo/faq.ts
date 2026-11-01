@@ -2,7 +2,7 @@ export const faqItems = [
   {
     question: "What does MoroccoMiles offer?",
     answer:
-      "Private custom Morocco tours and recommended multi-day journeys. Guests work with a travel designer in Marrakech who shapes the route, stays, guiding and daily rhythm of the trip."
+      "Private custom Morocco tours, recommended multi-day journeys, and car rental. MoroccoMiles is a tour operator and a car rental desk in Marrakech: self-drive or chauffeur, from normal cars to 4x4s and large tourist vehicles."
   },
   {
     question: "Are your Morocco tours completely private?",
@@ -43,5 +43,10 @@ export const faqItems = [
     question: "What happens after I submit an inquiry?",
     answer:
       "A Morocco-based travel designer will contact you within one business day. After a short conversation, we create a thoughtful first proposal for your review."
+  },
+  {
+    question: "Does MoroccoMiles rent cars as well as organise tours?",
+    answer:
+      "Yes. MoroccoMiles organises private tours and rents cars in Morocco: normal cars, 4x4s and large tourist vehicles, self-drive or with a chauffeur. A security hold and an excess apply in case of accident, theft or damage. Every rental car is GPS-tracked. The rental conditions list the papers required at pickup."
   }
 ] as const;

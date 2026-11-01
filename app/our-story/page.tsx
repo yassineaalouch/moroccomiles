@@ -19,8 +19,8 @@ export default function OurStoryPage() {
     <main className="bg-morocco-sand text-stone-800">
       <section className="relative min-h-[78vh] bg-morocco-dark">
         <Image
-          src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&w=2200&q=90"
-          alt="A historic Moroccan medina at sunset"
+          src="/images/destinations/fes/fes-el-bali-1.webp"
+          alt="Fes el-Bali lanes, Morocco"
           fill
           priority
           sizes="100vw"
@@ -61,7 +61,7 @@ export default function OurStoryPage() {
       <section className="bg-morocco-canvas px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
         <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-12 lg:items-center">
           <div className="relative aspect-[4/5] overflow-hidden lg:col-span-7">
-            <Image src="https://images.unsplash.com/photo-1579017331263-ef82f0bbc748?auto=format&fit=crop&w=1600&q=90" alt="Moroccan artisan heritage in Fes" fill sizes="(max-width: 1024px) 100vw, 58vw" className="object-cover" />
+            <Image src="/images/destinations/fes/chouara-tannery-1.webp" alt="Chouara Tannery in Fes" fill sizes="(max-width: 1024px) 100vw, 58vw" className="object-cover" />
           </div>
           <div className="lg:col-span-4 lg:col-start-9">
             <p className="mb-5 text-[10px] uppercase tracking-[0.4em] text-morocco-saffron">Local by design</p>
@@ -79,7 +79,7 @@ export default function OurStoryPage() {
             <p className="mt-7 font-sans text-sm leading-relaxed tracking-wide text-stone-600">We favor independent stays, locally owned kitchens, fair guide partnerships and a slower pace that places less pressure on fragile landscapes and historic neighborhoods.</p>
           </div>
           <div className="relative aspect-[5/4] overflow-hidden lg:col-span-6 lg:col-start-7">
-            <Image src="https://images.unsplash.com/photo-1548018560-c7196548e84d?auto=format&fit=crop&w=1600&q=90" alt="An Atlas mountain village in Morocco" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+            <Image src="/images/destinations/imlil/imlil-village-basecamp-1.webp" alt="Imlil village in the High Atlas" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
           </div>
         </div>
       </section>

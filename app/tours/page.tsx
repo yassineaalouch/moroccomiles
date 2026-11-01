@@ -28,7 +28,7 @@ export default function ToursPage() {
       />
       <section className="relative min-h-[58vh] bg-morocco-dark">
         <Image
-          src="https://images.unsplash.com/photo-1489493585363-d69421e0edd3?auto=format&fit=crop&w=2200&q=90"
+          src="https://images.unsplash.com/photo-1489493585363-d69421e0edd3?auto=format&fit=crop&fm=webp&w=1600&q=70"
           alt="A curated Morocco journey across dunes and mountain light"
           fill
           priority

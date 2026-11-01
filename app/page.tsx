@@ -6,6 +6,7 @@ import { CityCard } from "@/components/CityCard";
 import { DynamicIntro } from "@/components/DynamicIslands";
 import { GeoInsight } from "@/components/GeoInsight";
 import { getDestinationCoverImage, moroccoData } from "@/data/moroccoData";
+import { categoryLabel, rentalCars } from "@/lib/car-rental";
 import { HOME_DESCRIPTION, IDENTITY, buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -22,6 +23,16 @@ const FEATURED_GATES = {
   chefchaouen: "keyhole",
   rabat: "tower"
 } as const;
+
+const featuredRentalIds = ["hyundai-i10", "dacia-duster", "minibus-h1"] as const;
+
+const featuredRentals = featuredRentalIds.map((id) => {
+  const car = rentalCars.find((item) => item.id === id);
+  if (!car) {
+    throw new Error(`Featured rental missing from rentalCars: ${id}`);
+  }
+  return car;
+});
 
 const featuredCities = (["marrakech", "fes", "chefchaouen", "rabat"] as const).map((slug) => {
   const city = moroccoData.find((destination) => destination.slug === slug);
@@ -46,7 +57,7 @@ export default function HomePage() {
       <main className="overflow-hidden bg-morocco-sand">
       <section className="relative min-h-screen">
         <Image
-          src="https://images.unsplash.com/photo-1489493585363-d69421e0edd3?auto=format&fit=crop&w=2400&q=90"
+          src="https://images.unsplash.com/photo-1489493585363-d69421e0edd3?auto=format&fit=crop&fm=webp&w=1600&q=70"
           alt="A caravan crossing the golden dunes of the Moroccan Sahara"
           fill
           priority
@@ -59,7 +70,7 @@ export default function HomePage() {
         <div className="relative mx-auto flex min-h-screen max-w-[1500px] items-end px-5 pb-20 pt-36 sm:px-8 sm:pb-24 lg:px-12">
           <div className="max-w-4xl">
             <p className="mb-6 flex items-center gap-4 text-[10px] uppercase tracking-[0.45em] text-morocco-saffron">
-              <span className="h-px w-12 bg-morocco-saffron" /> Private tours · Custom travel · Morocco
+              <span className="h-px w-12 bg-morocco-saffron" /> Private tours · Car rental · Morocco
             </p>
             <h1 className="text-balance font-serif text-6xl font-medium leading-[0.88] tracking-[-0.04em] text-morocco-sand sm:text-8xl lg:text-[9.4rem]">
               Morocco,<br /><em className="font-normal text-morocco-saffron">felt deeply.</em>
@@ -100,10 +111,50 @@ export default function HomePage() {
 
       <GeoInsight
         eyebrow="Direct answer"
-        answer="MoroccoMiles is a Marrakech travel agency that designs and books private Morocco tours, with a 4.9 guest rating across 142 reviews."
-        insight="We shape custom itineraries, pair you with certified native guides, and reserve riads and desert bivouacs. The typical travel time between Marrakech and the Merzouga Sahara dunes is 8 to 9 hours across the High Atlas. Local insider tips from our 15 years of craft shape every authentic hand-crafted passage."
-        french="MoroccoMiles est une agence de voyages à Marrakech qui conçoit et réserve des circuits touristiques privés : guides, hébergements et transport avec chauffeur dans le cadre du voyage."
+        answer="MoroccoMiles is a Marrakech travel agency for private Morocco tours, and a car rental desk for the road between them, with a 4.9 guest rating across 142 reviews."
+        insight="We shape custom itineraries, pair you with certified native guides, and reserve riads and desert bivouacs. The same desk rents normal cars, 4×4s and large tourist vehicles, self-drive or with a chauffeur. The typical travel time between Marrakech and the Merzouga Sahara dunes is 8 to 9 hours across the High Atlas."
+        french="MoroccoMiles est une agence de voyages et de location de voitures à Marrakech : circuits privés, et aussi citadines, 4×4 et grandes voitures touristiques, en conduite libre ou avec chauffeur."
       />
+
+      <section id="car-rental" className="bg-morocco-dark px-5 py-24 text-morocco-sand sm:px-8 sm:py-32 lg:px-12">
+        <div className="mx-auto max-w-[1500px]">
+          <div className="mb-14 grid gap-8 lg:grid-cols-2 lg:items-end">
+            <div>
+              <p className="mb-4 text-[10px] uppercase tracking-[0.4em] text-morocco-saffron">Car rental</p>
+              <h2 className="text-balance font-serif text-5xl leading-none sm:text-7xl">
+                MoroccoMiles also<br />rents the car.
+              </h2>
+            </div>
+            <div className="max-w-lg lg:justify-self-end">
+              <p className="font-sans text-sm leading-relaxed tracking-wide text-morocco-sand/75">
+                Tours are one part of the desk. We also rent normal cars, 4×4s and large tourist vehicles across Morocco — self-drive, or with a chauffeur — with handover at the airport, the riad or the hotel.
+              </p>
+              <Link href="/car-rental" className="group mt-8 inline-flex items-center gap-4 bg-morocco-saffron px-7 py-4 text-[10px] font-bold uppercase tracking-[0.28em] text-morocco-dark transition-all duration-300 hover:brightness-110 hover:shadow-gold">
+                See the fleet <ArrowRight size={16} className="transition-all duration-300 group-hover:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {featuredRentals.map((car) => (
+              <Link key={car.id} href={`/car-rental?car=${car.id}#request`} className="group flex flex-col border border-morocco-saffron/20 bg-morocco-surface">
+                <div className="relative aspect-[16/10] bg-white">
+                  <Image src={car.image} alt={car.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.03]" />
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-morocco-saffron">{categoryLabel[car.category]}</p>
+                  <h3 className="mt-3 font-serif text-3xl leading-none text-morocco-sand">{car.name}</h3>
+                  <p className="mt-4 text-[10px] uppercase tracking-[0.22em] text-morocco-sand/55">
+                    {car.seats} · {car.gearbox}
+                  </p>
+                  <p className="mt-6 font-serif text-3xl leading-none">
+                    {car.priceEur} €<span className="ml-2 font-sans text-xs uppercase tracking-[0.2em] text-morocco-sand/55">/ day</span>
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section id="destinations" className="relative bg-morocco-sand px-5 py-24 text-stone-800 sm:px-8 sm:py-32 lg:px-12">
         <div className="moroccan-grid absolute inset-0 opacity-[0.06]" />
@@ -144,7 +195,7 @@ export default function HomePage() {
             ].map((journey) => (
               <article key={journey.number} className="group bg-morocco-sand p-5">
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image src={journey.image} alt={journey.title} fill loading="eager" sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover grayscale-[20%] transition-[transform,filter] duration-300 group-hover:scale-105 group-hover:grayscale-0" />
+                  <Image src={journey.image} alt={journey.title} fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover grayscale-[20%] transition-[transform,filter] duration-300 group-hover:scale-105 group-hover:grayscale-0" />
                   <span className="absolute left-4 top-4 grid size-10 place-items-center bg-morocco-surface font-serif text-morocco-saffron">{journey.number}</span>
                 </div>
                 <div className="px-2 pb-5 pt-7">
@@ -158,7 +209,7 @@ export default function HomePage() {
       </section>
 
       <section className="relative min-h-[70vh] overflow-hidden">
-        <Image src="https://images.unsplash.com/photo-1492693429561-1c283eb1b2e8?auto=format&fit=crop&w=2000&q=90" alt="Moroccan riad courtyard at dusk" fill sizes="100vw" className="object-cover" />
+        <Image src="https://images.unsplash.com/photo-1492693429561-1c283eb1b2e8?auto=format&fit=crop&fm=webp&w=1600&q=70" alt="Moroccan riad courtyard at dusk" fill sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-morocco-dark/70" />
         <div className="relative mx-auto flex min-h-[70vh] max-w-5xl flex-col items-center justify-center px-5 py-24 text-center">
           <Sparkles className="mb-8 text-morocco-saffron" strokeWidth={1} />

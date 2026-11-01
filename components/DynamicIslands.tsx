@@ -28,6 +28,14 @@ const ToursCatalog = dynamic(() => import("./ToursCatalog"), {
   ssr: false,
   loading: () => <div className="min-h-[70vh] animate-pulse bg-morocco-sand" />
 });
+const CarRentalForm = dynamic(() => import("./CarRentalForm"), {
+  ssr: false,
+  loading: () => <div className="min-h-96 animate-pulse border border-morocco-saffron/10 bg-morocco-surface" />
+});
+const CarRentalCatalog = dynamic(() => import("./CarRentalCatalog"), {
+  ssr: false,
+  loading: () => <div className="min-h-[40vh] animate-pulse bg-morocco-sand" />
+});
 
 export function DynamicIntro() {
   return <IntroOverlay />;
@@ -74,4 +82,12 @@ export function DynamicItineraryBuilder() {
 
 export function DynamicToursCatalog() {
   return <ToursCatalog />;
+}
+
+export function DynamicCarRentalForm() {
+  return <CarRentalForm />;
+}
+
+export function DynamicCarRentalCatalog() {
+  return <CarRentalCatalog />;
 }

@@ -20,8 +20,8 @@ export default function ContactPage() {
     <main className="bg-morocco-sand text-stone-800">
       <section className="relative min-h-[64vh] bg-morocco-dark">
         <Image
-          src="https://images.unsplash.com/photo-1597211684565-dca64d72bdfe?auto=format&fit=crop&w=2200&q=90"
-          alt="Marrakech at dusk"
+          src="/images/destinations/marrakech/jemaa-el-fna-and-souks-1.webp"
+          alt="Marrakech medina at dusk"
           fill
           priority
           sizes="100vw"

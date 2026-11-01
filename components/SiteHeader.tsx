@@ -10,6 +10,7 @@ const LUXURY_EASE = [0.76, 0, 0.24, 1] as const;
 
 const primaryLinks = [
   { href: "/destinations", label: "Destinations" },
+  { href: "/car-rental", label: "Car rental" },
   { href: "/gallery", label: "Gallery" },
   { href: "/our-story", label: "Our story" },
   { href: "/faq", label: "Q&A" },
@@ -57,7 +58,7 @@ export default function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 text-[10px] uppercase tracking-[0.3em] text-morocco-sand/75 md:flex">
+        <nav className="hidden items-center gap-5 text-[10px] uppercase tracking-[0.22em] text-morocco-sand/75 lg:flex xl:gap-7 xl:tracking-[0.28em]">
           <Link href="/destinations" className="transition-all duration-300 hover:text-morocco-saffron">
             Destinations
           </Link>
@@ -96,13 +97,13 @@ export default function SiteHeader() {
         <div className="flex items-center gap-3">
           <Link
             href="/#destinations"
-            className="hidden border border-morocco-saffron/50 px-4 py-2.5 text-[9px] uppercase tracking-[0.25em] text-morocco-saffron transition-all duration-300 hover:bg-morocco-saffron hover:text-morocco-dark md:inline-flex md:px-6"
+            className="hidden border border-morocco-saffron/50 px-4 py-2.5 text-[9px] uppercase tracking-[0.25em] text-morocco-saffron transition-all duration-300 hover:bg-morocco-saffron hover:text-morocco-dark lg:inline-flex lg:px-6"
           >
             Begin a journey
           </Link>
           <button
             type="button"
-            className="grid size-11 place-items-center border border-morocco-sand/20 text-morocco-sand transition-colors duration-300 hover:border-morocco-saffron hover:text-morocco-saffron md:hidden"
+            className="grid size-11 place-items-center border border-morocco-sand/20 text-morocco-sand transition-colors duration-300 hover:border-morocco-saffron hover:text-morocco-saffron lg:hidden"
             aria-label={drawerOpen ? "Close menu" : "Open menu"}
             aria-expanded={drawerOpen}
             onClick={() => setDrawerOpen((open) => !open)}
@@ -115,7 +116,7 @@ export default function SiteHeader() {
       <AnimatePresence>
         {drawerOpen && (
           <motion.div
-            className="fixed inset-0 z-40 md:hidden"
+            className="fixed inset-0 z-40 lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

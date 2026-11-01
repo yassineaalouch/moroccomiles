@@ -784,22 +784,6 @@ export default function ItineraryBuilder() {
 
             <TreasureMap totalSteps={totalSteps} stops={stops} activeNode={activeNode} onNodeClick={openNode} />
 
-            <div className="mt-10 grid gap-4 border border-morocco-saffron/15 bg-morocco-canvas p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-              {stops.map((stop, index) => (
-                <div key={`summary-${index}`} className="border border-morocco-saffron/10 bg-morocco-sand px-4 py-4">
-                  <p className="text-[9px] uppercase tracking-[0.28em] text-morocco-saffron">Stop {index + 1}</p>
-                  {stop ? (
-                    <>
-                      <p className="mt-2 font-serif text-2xl text-morocco-dark">{stop.cityName}</p>
-                      <p className="mt-1 text-sm text-stone-600">{stop.nights} nights · {stop.includeAll ? "All highlights" : `${stop.landmarks.length} landmarks`}</p>
-                    </>
-                  ) : (
-                    <p className="mt-2 text-sm text-stone-400">{index === activeNode ? "Awaiting your choice" : "Locked until previous stop is confirmed"}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-
             {journeyComplete && (
               <motion.div
                 className="mt-10 border border-morocco-saffron/25 bg-morocco-surface p-8 text-morocco-sand sm:p-10"

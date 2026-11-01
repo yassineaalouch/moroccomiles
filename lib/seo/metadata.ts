@@ -32,7 +32,6 @@ export function buildPageMetadata({
   image = DEFAULT_OG_IMAGE,
   imageAlt = DEFAULT_OG_ALT,
   keywords,
-  absoluteTitle = false,
   ogType = "website"
 }: PageMetadataInput): Metadata {
   const url = absoluteUrl(path);
@@ -44,8 +43,10 @@ export function buildPageMetadata({
     alt: imageAlt
   };
 
+  const documentTitle = path === "/" ? SITE_NAME : `${SITE_NAME}${path.startsWith("/") ? path : `/${path}`}`;
+
   return {
-    title: absoluteTitle ? { absolute: title } : title,
+    title: { absolute: documentTitle },
     description,
     keywords,
     alternates: { canonical: path },
@@ -72,8 +73,8 @@ export function buildPageMetadata({
 export const rootMetadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: IDENTITY.titleDefault,
-    template: "%s | MoroccoMiles"
+    default: SITE_NAME,
+    template: `${SITE_NAME}/%s`
   },
   description: HOME_DESCRIPTION,
   keywords: [...IDENTITY.keywords],

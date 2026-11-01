@@ -47,7 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <div>
               <p className="font-serif text-3xl">Morocco<span className="text-morocco-saffron">Miles</span></p>
               <p className="mt-2 text-xs text-morocco-sand/50">Journeys remembered long after the road ends.</p>
-              <p lang="fr" className="mt-1 text-xs text-morocco-sand/40">Agence de voyages · circuits privés au Maroc.</p>
+              <p lang="fr" className="mt-1 text-xs text-morocco-sand/40">Agence de voyages et location de voitures · circuits privés au Maroc.</p>
             </div>
             <p className="text-[9px] uppercase tracking-[0.3em] text-morocco-sand/40">Locally rooted · Privately guided · Tour operator · Made in Morocco</p>
           </div>

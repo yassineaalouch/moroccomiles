@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { GateMark } from "@/components/GateMark";
@@ -5,9 +6,14 @@ import { GateMark } from "@/components/GateMark";
 const waysBack = [
   { href: "/destinations", label: "Destinations" },
   { href: "/tours", label: "Tours" },
+  { href: "/car-rental", label: "Car rental" },
   { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Contact" }
 ] as const;
+
+export const metadata: Metadata = {
+  title: { absolute: "MoroccoMiles" }
+};
 
 export default function NotFound() {
   return (

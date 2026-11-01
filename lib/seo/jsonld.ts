@@ -12,7 +12,7 @@ const agencyId = `${SITE_URL}/#agency`;
 const websiteId = `${SITE_URL}/#website`;
 
 const agencyRef = {
-  "@type": ["TravelAgency", "TourOperator"],
+  "@type": ["TravelAgency", "TourOperator", "AutoRental"],
   "@id": agencyId,
   name: SITE_NAME,
   url: SITE_URL
@@ -20,11 +20,11 @@ const agencyRef = {
 
 export function travelAgencyJsonLd(): JsonLdNode {
   return {
-    "@type": ["TravelAgency", "TourOperator"],
+    "@type": ["TravelAgency", "TourOperator", "AutoRental"],
     "@id": agencyId,
     name: AGENCY.name,
     legalName: AGENCY.legalName,
-    alternateName: ["Morocco Miles", "MoroccoMiles Tours"],
+    alternateName: ["Morocco Miles", "MoroccoMiles Tours", "MoroccoMiles Car Rental"],
     url: SITE_URL,
     image: absoluteUrl("/images/destinations/marrakech/jemaa-el-fna-and-souks-1.webp"),
     logo: absoluteUrl("/images/destinations/marrakech/koutoubia-mosque-1.webp"),
@@ -42,6 +42,8 @@ export function travelAgencyJsonLd(): JsonLdNode {
       "Private Morocco tours",
       "Custom itinerary design",
       "Tourist travel booking",
+      "Car rental in Morocco",
+      "4x4 and tourist vehicle hire",
       "Saharan luxury desert bivouacs",
       "Imperial city medina guiding",
       "High Atlas trekking"
@@ -51,16 +53,30 @@ export function travelAgencyJsonLd(): JsonLdNode {
       "@type": "Brand",
       name: SITE_NAME
     },
-    makesOffer: {
-      "@type": "Offer",
-      itemOffered: {
-        "@type": "Service",
-        name: "Private custom Morocco tour",
-        serviceType: "Guided tour / packaged travel",
-        category: "Private guided tours and custom travel",
-        description: IDENTITY.disambiguationEn
+    makesOffer: [
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Private custom Morocco tour",
+          serviceType: "Guided tour / packaged travel",
+          category: "Private guided tours and custom travel",
+          description: IDENTITY.disambiguationEn
+        }
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Morocco car rental",
+          serviceType: "Car rental",
+          category: "Self-drive and chauffeur car rental",
+          url: absoluteUrl("/car-rental"),
+          description:
+            "Normal cars, 4x4s and large tourist vehicles for hire in Morocco, with airport or riad handover."
+        }
       }
-    },
+    ],
     address: {
       "@type": "PostalAddress",
       streetAddress: AGENCY.address.streetAddress,
@@ -103,7 +119,7 @@ export function websiteJsonLd(): JsonLdNode {
     "@type": "WebSite",
     "@id": websiteId,
     name: SITE_NAME,
-    alternateName: "MoroccoMiles private tours",
+    alternateName: ["MoroccoMiles private tours", "MoroccoMiles car rental"],
     url: SITE_URL,
     description: IDENTITY.descriptionEn,
     disambiguatingDescription: IDENTITY.disambiguationEn,

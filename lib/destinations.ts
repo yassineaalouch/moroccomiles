@@ -28,11 +28,11 @@ export const destinations: Destination[] = [
     description:
       "A private passage through hidden riads, spice-laden souks and the lantern-lit theatre of Jemaa el-Fnaa, shaped around your own rhythm.",
     hero:
-      "https://images.unsplash.com/photo-1597211684565-dca64d72bdfe?auto=format&fit=crop&w=2000&q=90",
+      "https://images.unsplash.com/photo-1597211684565-dca64d72bdfe?auto=format&fit=crop&fm=webp&w=1600&q=70",
     gallery: [
-      "https://images.unsplash.com/photo-1548018560-c7196548e84d?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1597735881932-d9664c9bbcea?auto=format&fit=crop&w=1200&q=85"
+      "https://images.unsplash.com/photo-1548018560-c7196548e84d?auto=format&fit=crop&fm=webp&w=1280&q=68",
+      "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&fm=webp&w=1280&q=68",
+      "https://images.unsplash.com/photo-1597735881932-d9664c9bbcea?auto=format&fit=crop&fm=webp&w=1280&q=68"
     ],
     price: 245,
     duration: "3 days · 2 nights",
@@ -52,11 +52,11 @@ export const destinations: Destination[] = [
     description:
       "Enter Morocco's spiritual heart with a local storyteller, from blue-tiled Bab Boujloud to copper souks and centuries-old courtyards.",
     hero:
-      "https://images.unsplash.com/photo-1579017331263-ef82f0bbc748?auto=format&fit=crop&w=2000&q=90",
+      "https://images.unsplash.com/photo-1579017331263-ef82f0bbc748?auto=format&fit=crop&fm=webp&w=1600&q=70",
     gallery: [
-      "https://images.unsplash.com/photo-1604323990536-e5452c0507c1?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1577147443647-81856d5151af?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1553603227-2358aabe821e?auto=format&fit=crop&w=1200&q=85"
+      "https://images.unsplash.com/photo-1604323990536-e5452c0507c1?auto=format&fit=crop&fm=webp&w=1280&q=68",
+      "https://images.unsplash.com/photo-1577147443647-81856d5151af?auto=format&fit=crop&fm=webp&w=1280&q=68",
+      "https://images.unsplash.com/photo-1553603227-2358aabe821e?auto=format&fit=crop&fm=webp&w=1280&q=68"
     ],
     price: 285,
     duration: "3 days · 2 nights",
@@ -76,11 +76,11 @@ export const destinations: Destination[] = [
     description:
       "A quiet, photographic immersion among cobalt lanes, mountain springs and the soft morning light of Morocco's most dreamlike town.",
     hero:
-      "https://images.unsplash.com/photo-1553249071-2f0d6a1e9e7d?auto=format&fit=crop&w=2000&q=90",
+      "https://images.unsplash.com/photo-1553249071-2f0d6a1e9e7d?auto=format&fit=crop&fm=webp&w=1600&q=70",
     gallery: [
-      "https://images.unsplash.com/photo-1532176849879-92f85770f3bb?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1517825738774-7de9363ef735?auto=format&fit=crop&w=1200&q=85"
+      "https://images.unsplash.com/photo-1532176849879-92f85770f3bb?auto=format&fit=crop&fm=webp&w=1280&q=68",
+      "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?auto=format&fit=crop&fm=webp&w=1280&q=68",
+      "https://images.unsplash.com/photo-1517825738774-7de9363ef735?auto=format&fit=crop&fm=webp&w=1280&q=68"
     ],
     price: 215,
     duration: "2 days · 1 night",
@@ -99,11 +99,11 @@ export const destinations: Destination[] = [
     description:
       "An elegant coastal story moving between royal avenues, the Kasbah of the Udayas and Atlantic gardens scented with orange blossom.",
     hero:
-      "https://images.unsplash.com/photo-1575283757980-195c7aee8846?auto=format&fit=crop&w=2000&q=90",
+      "https://images.unsplash.com/photo-1575283757980-195c7aee8846?auto=format&fit=crop&fm=webp&w=1600&q=70",
     gallery: [
-      "https://images.unsplash.com/photo-1624801512577-7b3d0c9ed54e?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1564507004663-b6dfb3c824d5?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1553165558-77b4b05ab56f?auto=format&fit=crop&w=1200&q=85"
+      "https://images.unsplash.com/photo-1624801512577-7b3d0c9ed54e?auto=format&fit=crop&fm=webp&w=1280&q=68",
+      "https://images.unsplash.com/photo-1564507004663-b6dfb3c824d5?auto=format&fit=crop&fm=webp&w=1280&q=68",
+      "https://images.unsplash.com/photo-1553165558-77b4b05ab56f?auto=format&fit=crop&fm=webp&w=1280&q=68"
     ],
     price: 195,
     duration: "2 days · 1 night",
