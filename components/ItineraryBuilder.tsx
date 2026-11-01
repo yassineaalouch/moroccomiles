@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useMotionValue, animate, type PanInfo } from "
 import { Check, ChevronLeft, ChevronRight, Lock, Minus, Plus, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import BookingForm from "@/components/BookingForm";
 import { builderCities, toLandmarkId, type BuilderCity, type LandmarkOption } from "@/lib/itinerary-cities";
 
@@ -439,6 +439,8 @@ function DurationDrawer({
   const [nights, setNights] = useState(2);
   const [includeAll, setIncludeAll] = useState(false);
   const [landmarks, setLandmarks] = useState<string[]>([]);
+  const [customPlaces, setCustomPlaces] = useState<string[]>([]);
+  const focusNextCustomPlace = useRef(false);
 
   const toggleLandmark = (title: string) => {
     setIncludeAll(false);
@@ -451,7 +453,18 @@ function DurationDrawer({
     setLandmarks(next ? city.landmarks.map((item) => item.title) : []);
   };
 
-  const selectedCount = includeAll ? city.landmarks.length : landmarks.length;
+  const addCustomPlace = () => {
+    focusNextCustomPlace.current = true;
+    setCustomPlaces((current) => [...current, ""]);
+  };
+
+  const customNames = customPlaces.map((place) => place.trim()).filter(Boolean);
+  const listedLandmarks = includeAll ? city.landmarks.map((item) => item.title) : landmarks;
+  const chosenLandmarks = [
+    ...listedLandmarks,
+    ...customNames.filter((place) => !listedLandmarks.some((title) => title.toLowerCase() === place.toLowerCase()))
+  ];
+  const selectedCount = chosenLandmarks.length;
 
   return (
     <motion.div
@@ -512,6 +525,44 @@ function DurationDrawer({
                 );
               })}
             </div>
+
+            <div className="mt-4 space-y-3">
+              {customPlaces.map((place, index) => (
+                <label key={`custom-place-${index}`} className="flex items-center gap-3 border border-morocco-saffron/25 bg-morocco-sand px-4 py-3">
+                  <span className="shrink-0 text-[10px] uppercase tracking-[0.22em] text-morocco-saffron">Other</span>
+                  <input
+                    ref={(node) => {
+                      if (!node || !focusNextCustomPlace.current || index !== customPlaces.length - 1) return;
+                      node.focus();
+                      focusNextCustomPlace.current = false;
+                    }}
+                    value={place}
+                    onChange={(event) =>
+                      setCustomPlaces((current) => current.map((item, itemIndex) => (itemIndex === index ? event.target.value : item)))
+                    }
+                    placeholder="Name the place"
+                    aria-label={`Other place ${index + 1}`}
+                    className="min-w-0 flex-1 bg-transparent font-serif text-lg text-morocco-dark outline-none placeholder:font-sans placeholder:text-sm placeholder:text-stone-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setCustomPlaces((current) => current.filter((_, itemIndex) => itemIndex !== index))}
+                    className="text-stone-400 transition-colors duration-300 hover:text-morocco-dark"
+                    aria-label={`Remove other place ${index + 1}`}
+                  >
+                    <X size={16} />
+                  </button>
+                </label>
+              ))}
+              <button
+                type="button"
+                onClick={addCustomPlace}
+                className="inline-flex items-center gap-2 border border-dashed border-morocco-saffron/40 bg-morocco-sand px-4 py-3 text-[10px] uppercase tracking-[0.22em] text-morocco-dark transition-all duration-300 hover:border-morocco-saffron hover:text-morocco-saffron"
+              >
+                <Plus size={14} />
+                Other
+              </button>
+            </div>
           </div>
 
           <div>
@@ -537,7 +588,7 @@ function DurationDrawer({
             onClick={() =>
               onConfirm({
                 nights,
-                landmarks: includeAll ? city.landmarks.map((item) => item.title) : landmarks,
+                landmarks: chosenLandmarks,
                 includeAll
               })
             }

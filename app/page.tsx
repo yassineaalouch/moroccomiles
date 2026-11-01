@@ -91,7 +91,7 @@ export default function HomePage() {
       </section>
 
       <section id="story" className="relative border-y border-morocco-saffron/15 bg-morocco-canvas py-10">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-5 sm:grid-cols-4 sm:px-8">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-10 gap-y-6 px-5 sm:gap-x-16 sm:px-8">
           {[
             [ShieldCheck, "Licensed local experts"],
             [Award, "15 years of craft"],
@@ -100,7 +100,7 @@ export default function HomePage() {
           ].map(([Icon, label]) => {
             const BadgeIcon = Icon as typeof Star;
             return (
-              <div key={label as string} className="flex items-center gap-3 text-[9px] uppercase tracking-[0.18em] text-stone-600 sm:text-[10px]">
+              <div key={label as string} className="flex items-center justify-center gap-3 text-[9px] uppercase tracking-[0.18em] text-stone-600 sm:text-[10px]">
                 <BadgeIcon size={18} strokeWidth={1.5} className="shrink-0 text-morocco-mint" />
                 {label as string}
               </div>
